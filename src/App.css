@@ -1,0 +1,112 @@
+.App {
+    background-color: var(--pr-color);
+    color: var(--font-sec-color);
+    height: 100%;
+    display: flex;
+    --pr-transparent: #ffffff09;
+    --dark-transparent: #00000061;
+    scrollbar-width: thin;
+}
+.hc-text {
+    color: var(--font-pr-color);
+}
+.elevated {
+    background-color: var(--pr-transparent);
+}
+.depressed {
+    background-color: var(--dark-transparent);
+}
+#App-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 100%;
+    min-width: 180px;
+    background-color: var(--pr-transparent);
+}
+#App-nav > * {
+    padding: 1rem;
+    border-left: 2px solid transparent;
+    width: 100%;
+    box-sizing: border-box;
+}
+#App-nav.collapsed {
+    min-width: 60px;
+    max-width: 60px;
+    
+}
+#App-nav.collapsed .nav-label {
+    display: none;
+}
+#App-nav .nav-item {
+    color: var(--font-sec-color);
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+#App-nav .nav-item.selected {
+    background-color: #00000020;
+    border-left: 2px solid var(--sec-color);
+    color: var(--sec-color);
+}
+.App-main {
+    padding: 1rem;
+    width: 100%;
+}
+.icon {
+    color: var(--sec-color);
+    cursor: pointer;
+}
+.icon.lg {
+    font-size: 1.3rem;
+}
+.icon-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--sec-color);
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+#theme-btn {
+    margin-left: auto;
+}
+.has-dropdown {
+    position: relative;
+}
+.has-dropdown .dropdown {
+    position: absolute;
+    top: calc(100% + 20px);
+    right: 1%;
+    min-width: 150px;
+    max-width: 400px;
+    background-color: #ffffff09;
+    z-index: 2;
+    visibility: hidden;
+    opacity: 0;
+}
+.dropdown li {
+    margin: 1rem;
+}
+.has-dropdown:focus-within .dropdown {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+}
+#home {
+    margin-top: 1.5rem;
+}
+#home .recent-exp .items {
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sec-color) var(--dark-transparent);
+}
+@media (max-width: 640px) {
+    #App-nav {
+        min-width: 60px;
+        max-width: 60px;
+        align-items: center;
+    }
+    #App-nav .nav-label {
+        display: none;
+    }
+}
