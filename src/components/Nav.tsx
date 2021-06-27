@@ -11,12 +11,12 @@ let Navbar: React.FC<{}> = function Navbar(props) {
     }
 
     return <nav id="App-nav">
-        <h3>
+        <h5>
             <FontAwesomeIcon icon={faBars} 
                 onClick = {e => navCollapse()}
                 className="icon lg mr-2"></FontAwesomeIcon>
             <span className="nav-label font-sec" style={{paddingLeft: '0.4rem'}}>ExSpender</span>
-        </h3>
+        </h5>
         <Link to='/' className= {'nav-item ' + (location.pathname === '/'? 'selected' : '')}>
             <FontAwesomeIcon icon={faHome} className="icon lg mr-2"></FontAwesomeIcon>
             <span className="nav-label">Home</span>

@@ -37,33 +37,59 @@ function App() {
         <header className="App-header">
           <Navbar />
         </header>
-        <main className="App-main">
+        <main className="App-main container-fluid py-3">
           <Switch>
             <Route path="/annual">
               <div className="row">
-                <h1 className="hc-text">Annual</h1>
+                <h3 className="hc-text col-10">Annual</h3>
                 <ThemePopup themes={THEMES} cb={handleThemeChange} />
               </div>
               <Year />
             </Route>
             <Route path="/monthly">
               <div className="row">
-                <h1 className="hc-text">Month</h1>
+                <h3 className="hc-text col-10">Month</h3>
                 <ThemePopup themes={THEMES} cb={handleThemeChange} />
               </div>
               <Month />
             </Route>
             <Route path="/">
               <div className="row">
-                <h1 className="hc-text">Home</h1>
+                <h3 className="hc-text col-10">Home</h3>
                 <ThemePopup themes={THEMES} cb={handleThemeChange} />
               </div>
               <Home />
             </Route>
           </Switch>
         </main>
-
       </Router>
+      {/* <form id="budgetFormDialog" className="center-form dp06 invisible">
+        <div className="d-flex jc-between ai-center mb-4">
+          <h5>Add Budget</h5>
+          <FontAwesomeIcon icon={faTimes} className="icon lg"></FontAwesomeIcon>
+        </div>
+        <div>
+          <label htmlFor="budget-month" className="mr-3">Month</label>
+          <select name="budget-month" id="budget-month" className="mb-3">
+            {
+              monthInputOptions.map(o => {
+                return <option value={o.value} key={o.value}>{o.text}</option>
+              })
+            }
+          </select>
+        </div>
+        <div className="d-flex jc-between">
+          <label htmlFor="budget-year" className="mr-3">Year</label>
+          <select name="budget-year" id="budget-year" className="mb-3">
+            {
+              yearInputOptions.map(o => {
+                return <option value={o} key={o}>{o}</option>
+              })
+            }
+          </select>
+        </div>
+        <button className="btn as-center">Add</button>
+      </form> */}
     </div>
   );
 }
@@ -73,7 +99,7 @@ let ThemePopup: React.FC<{ themes: ifTheme, cb: (key: string) => void }> = funct
   for (let t in props.themes) {
     themes.push(props.themes[t]);
   }
-  return <div id="theme-btn" className="has-dropdown">
+  return <div id="theme-btn" className="has-dropdown col-2 text-right">
     <button className="icon-btn">
       <FontAwesomeIcon icon={faPalette} className="icon lg"></FontAwesomeIcon>
     </button>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { expenseType } from '../app/constants/Types';
+import { format } from 'date-fns'
 
 let ExpenseItem: React.FC<{expense: expenseType}> = function(props) {
     let expense = props.expense;
@@ -17,10 +18,10 @@ let ExpenseItem: React.FC<{expense: expenseType}> = function(props) {
     }
     return <li key={props.expense.id} className="expense-item elevated" style={expItemStyle}>
         <div>
-            <h4 className="header" style={headerStyle}>{expense.name}</h4>
-            <p>{expense.date}</p>
+            <h6 className="header" style={headerStyle}>{expense.name}</h6>
+            <p className="h6">{format(expense.date, 'dd/MM/yyyy')}</p>
         </div>
-        <h3 style={{color: 'var(--sec-color)'}}>₹ {expense.amount}</h3>
+        <h6 style={{color: 'var(--sec-color)'}}>₹ {expense.amount}</h6>
     </li>;
 }
 
