@@ -68,7 +68,6 @@ a {
   text-decoration: none;
   color: var(--sec-color);
 }
-
 html, body, #root {
   height: 100%;
 }
@@ -81,6 +80,19 @@ select {
 option {
 	background-color: var(--primary-color);
 	color: black;
+}
+input {
+	background-color: var(--pr-color);
+	border: 1px solid #555;
+	color: var(--sec-color);
+	padding: 0.4rem 0.6rem;
+}
+input::placeholder {
+	color: #bbb;
+}
+input[type=number] { 
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 .font-sec {
   color: var(--font-sec-color);

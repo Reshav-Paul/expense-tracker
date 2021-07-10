@@ -37,16 +37,19 @@ type profileType = {
     lastName?: string,
     currentBudget: headerType,
 }
-
-type stateType = {
+type budgetStateType = {
     profile: profileType,
     budgets: budgetType[],
     yearlyBudgets: yearlyBudgetType[]
+}
+type stateType = {
+    theme: themeType,
+    budget: budgetStateType,
 }
 
 export type { 
     themeType, 
     expenseType, headerType,
     budgetType, yearlyBudgetType,
-    profileType, stateType
+    profileType, budgetStateType, stateType
 };
