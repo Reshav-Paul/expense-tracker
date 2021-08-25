@@ -19,14 +19,14 @@ let ThemePopup: React.FC<{ themes: ifTheme }> = function ThemePopup(props) {
       themes.push(props.themes[t]);
     }
     return <div id="theme-btn" className="has-dropdown col-2 text-right">
-      <button className="icon-btn">
+      <button className="bg-pr">
         <FontAwesomeIcon icon={faPalette} className="icon lg"></FontAwesomeIcon>
       </button>
       <ul className="dropdown">
         {
           themes.map(t => <li key={t.key}>
             <button style={{ color: t.secColor }}
-              className="icon-btn"
+              className="bg-pr"
               onClick={e => handleThemeChange(t.key)}>{t.label}</button>
           </li>)
         }

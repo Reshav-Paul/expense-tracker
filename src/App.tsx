@@ -5,10 +5,10 @@ import {
 import { useSelector } from 'react-redux';
 
 import './App.css';
-import Home from './components/Home';
-import Month from './components/Month';
+import Home from './Home';
+import Month from './Month';
 import Navbar from './components/Nav';
-import Year from './components/Year';
+import Year from './Year';
 import { getTheme } from './app/reducers/themeReducer';
 import THEMES from './app/constants/Themes';
 import ThemePopup from './components/ThemePopup';

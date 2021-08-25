@@ -3,71 +3,57 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { budgetType } from '../app/constants/Types';
-import { monthMap } from '../app/constants/utilityData';
+import { HoverForm, InputMonth, InputYear } from './utility';
 
 let MonthBudgetForm: React.FC<{
-    active: boolean,
-    close: () => void,
-    onSubmit: (payload: budgetType) => void,
-    currentMonth: number,
+	active: boolean,
+	close: () => void,
+	onSubmit: (payload: budgetType) => void,
+	budget: budgetType,
+	mode?: 'create' | 'update'
 }>
-    = function (props) {
+	= function (props) {
+		let { budget } = props;
+		let currentYear = (new Date()).getFullYear();
 
-        let months: number[] = [];
-        for (let i = props.currentMonth; i <= 12; i++) months.push(i);
-        for (let i = 1; i < props.currentMonth; i++) months.push(i);
-        
-        let yearInputOptions: number[] = [];
-        let currentYear = (new Date()).getFullYear();
-        for (let i = currentYear; i >= 2000; i--) yearInputOptions[currentYear - i] = i;
+		let [month, changeMonth] = useState(budget.month);
+		let [year, changeYear] = useState(budget.year || currentYear);
+		let [amount, changeAmount] = useState(budget.amount ? budget.amount.toString() : '');
 
-        let [month, changeMonth] = useState(props.currentMonth);
-        let [year, changeYear] = useState(currentYear);
-        let [budget, changeBudget] = useState('');
-        useEffect(() => changeMonth(props.currentMonth), [props.currentMonth])
+		useEffect(() => changeMonth(props.budget.month), [props.budget.month]);
+		useEffect(() => changeYear(props.budget.year), [props.budget.year]);
+		useEffect(() => changeAmount(budget.amount ? budget.amount.toString() : ''), [props.budget.amount]);
 
-        function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-            e.preventDefault();
-            let numBudget = parseInt(budget)
-            props.onSubmit({
-                month, year, budget: numBudget,
-            });
-            props.close();
-        }
+		function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+			e.preventDefault();
+			let numBudget = parseInt(amount)
+			props.onSubmit({
+				month, year, amount: numBudget,
+			});
+			props.close();
+		}
 
-        return <div className={"center-form-bg" + (props.active ? "" : " invisible")}>
-            <form id="budgetFormDialog" className="center-form dp04" onSubmit={handleSubmit}>
-                <div className="d-flex jc-between ai-center mb-4">
-                    <h5>Add Budget</h5>
-                    <FontAwesomeIcon icon={faTimes} className="icon lg" onClick={e => props.close()}></FontAwesomeIcon>
-                </div>
-                <div>
-                    <label htmlFor="budget-month" className="mr-3">Month</label>
-                    <select name="budget-month" id="budget-month" className="mb-3" required
-                        value={month} onChange={e => changeMonth(parseInt(e.target.value))}>
-                        {
-                            months.map(k => {
-                                return <option value={k} key={months.indexOf(k)}>{monthMap[k]}</option>
-                            })
-                        }
-                    </select>
-                </div>
-                <div className="d-flex jc-between">
-                    <label htmlFor="budget-year" className="mr-3">Year</label>
-                    <select name="budget-year" id="budget-year" className="mb-3" required
-                        value={year} onChange={e => changeYear(parseInt(e.target.value))}>
-                        {
-                            yearInputOptions.map(o => {
-                                return <option value={o} key={o}>{o}</option>
-                            })
-                        }
-                    </select>
-                </div>
-                <input type="number" name="budget-amount" id="budget-amount" className="mb-3"
-                    placeholder="Budget" value={budget} onChange={e => changeBudget(e.target.value)} required />
-                <button className="btn as-center">Add</button>
-            </form>
-        </div>
-    }
+		let modeText = 'Add';
+		if (props.mode === 'update') modeText = 'Update';
+
+		return <HoverForm active={props.active} submit={handleSubmit} close={props.close}>
+			<div className="d-flex jc-between ai-center mb-4">
+				<h5>{modeText} Budget</h5>
+				<FontAwesomeIcon icon={faTimes} className="icon lg" onClick={e => props.close()}></FontAwesomeIcon>
+			</div>
+			<div className="d-flex jc-between">
+				<label htmlFor="budget-month" className="mr-3">Month</label>
+				<InputMonth value={month} update={changeMonth} />
+			</div>
+			<div className="d-flex jc-between">
+				<label htmlFor="budget-year" className="mr-3">Year</label>
+				<InputYear value={year} update={changeYear} />
+			</div>
+			<input type="number" name="budget-amount" id="budget-amount" className="mb-3"
+				placeholder="Budget" value={amount} onChange={e => changeAmount(e.target.value)} required />
+			<button className="btn as-center">{modeText}</button>
+		</HoverForm>
+
+	}
 
 export default MonthBudgetForm;

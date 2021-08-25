@@ -23,7 +23,7 @@ const DARK_NIGHTS: themeType = {
     key: 'DARK_NIGHTS',
     label: 'Dark Night',
     prColor: '#161620',
-    secColor: '#487CBF',
+    secColor: '#5787C4',
     fontPrColor: '#E5E5E5',
     fontSecColor: '#B5B5B5'
 }

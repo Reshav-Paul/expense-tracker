@@ -7,15 +7,6 @@ type themeType = {
     fontSecColor: string
 };
 
-type expenseType = {
-    id: string,
-    name: string,
-    date: Date,
-    amount: number,
-    month: string,
-    year: string,
-};
-
 type headerType = {
     currentYearBudget?: number,
     currentMonthBudget?: number,
@@ -24,7 +15,7 @@ type headerType = {
 type budgetType = {
     year: number,
     month: number,
-    budget: number,
+    amount: number,
 }
 
 type yearlyBudgetType = {
@@ -37,19 +28,33 @@ type profileType = {
     lastName?: string,
     currentBudget: headerType,
 }
-type budgetStateType = {
+type expenseType = {
+    id: string,
+    date: string,
+    amount: number,
+    name: string,
+}
+
+type expenseCollection = {
+    month: number,
+    year: number,
+    expenses: expenseType[],
+}
+
+type userStateType = {
     profile: profileType,
     budgets: budgetType[],
-    yearlyBudgets: yearlyBudgetType[]
+    yearlyBudgets: yearlyBudgetType[],
+    expenses: expenseCollection[],
 }
 type stateType = {
     theme: themeType,
-    budget: budgetStateType,
+    budget: userStateType,
 }
 
 export type { 
     themeType, 
-    expenseType, headerType,
+    headerType, expenseType, expenseCollection,
     budgetType, yearlyBudgetType,
-    profileType, budgetStateType, stateType
+    profileType, userStateType, stateType
 };
