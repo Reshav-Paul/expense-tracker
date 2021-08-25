@@ -7,8 +7,20 @@
     --dark-transparent: #00000061;
     scrollbar-width: thin;
 }
-.hc-text {
+/* .hc-text {
     color: var(--font-sec-color);
+} */
+.fc-pr {
+    color: var(--font-pr-color);
+}
+.fc-sec {
+    color: var(--font-sec-color);
+}
+.bg-pr {
+    background-color: var(--pr-color);
+}
+.bg-sec {
+    background-color: var(--sec-color);
 }
 .elevated {
     background-color: var(--pr-transparent);
@@ -18,8 +30,7 @@
 }
 .btn {
     background-color: var(--sec-color);
-    color: var(--pr-color);
-    border: none;
+    color: var(--font-pr-color);
     padding: 0.5rem 0.8rem;
 }
 .hover-container {
@@ -113,10 +124,11 @@
     font-size: 1.2rem;
 }
 .icon-btn {
-    background-color: transparent;
-    border: none;
-    color: var(--sec-color);
     cursor: pointer;
+    color: var(--font-pr-color);
+    background-color: var(--pr-color);
+    border: 2px solid var(--sec-color);
+    border-radius: 1rem;
     font-size: 0.9rem;
 }
 #theme-btn {
