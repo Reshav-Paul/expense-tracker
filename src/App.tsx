@@ -9,9 +9,9 @@ import Home from './Home';
 import Month from './Month';
 import Navbar from './components/Nav';
 import Year from './Year';
-import { getTheme } from './app/reducers/themeReducer';
 import THEMES from './app/constants/Themes';
 import ThemePopup from './components/ThemePopup';
+import { getTheme } from './app/store';
 
 function App() {
   const theme = useSelector(getTheme);

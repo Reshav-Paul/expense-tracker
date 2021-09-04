@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addBudget, getUserState, getBudget, getYears } from './app/reducers/userStateReducer';
 
 import MonthBudgetForm from './components/MonthBudgetForm';
-import { budgetType } from './app/constants/Types';
 import { monthMap, monthArray } from './app/constants/utilityData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import ThemePopup from './components/ThemePopup';
 import THEMES from './app/constants/Themes';
 import MonthMain from './MonthMain';
+import { monthlyBudgetType } from './app/constants/Types';
+import { addMonthBudget, getBudgetByMonthYear, getYearsFromMonthBudget } from './app/reducers/monthlyBudgetReducer';
+import { getMonthBudgets } from './app/store';
 
 let Month: React.FC<{}> = function (props) {
   const dispatch = useDispatch();
-  const state = useSelector(getUserState);
+  const state = useSelector(getMonthBudgets);
 
   let [month, changeMonth] = useState(1);
   let [year, changeYear] = useState((new Date()).getFullYear());
@@ -21,13 +22,13 @@ let Month: React.FC<{}> = function (props) {
 
   let closeForm = () => showForm(false);
 
-  function submitForm(payload: budgetType) {
-    dispatch(addBudget(payload));
+  function submitForm(payload: monthlyBudgetType) {
+    dispatch(addMonthBudget(payload));
   }
 
-  let monthlyBudget = getBudget(state, month, year);
-  let yearsInData = getYears(state);
-  
+  let monthlyBudget = getBudgetByMonthYear(state, month, year);
+  let yearsInData = getYearsFromMonthBudget(state);
+
   return <div className="container-fluid h-100">
     <div className="row">
       <h4 className="hc-text col-10">Month</h4>
@@ -52,14 +53,14 @@ let Month: React.FC<{}> = function (props) {
     </section>
     {
       monthlyBudget
-      ? <MonthMain budget={monthlyBudget} month={month} year={year} />
-      : <section className="h-80">
-      <div className="h-100 d-flex jc-center ai-center">
-        <h4>No Budget Added</h4>
-      </div>
-    </section>
+        ? <MonthMain budget={monthlyBudget} month={month} year={year} />
+        : <section className="h-80">
+          <div className="h-100 d-flex jc-center ai-center">
+            <h4>No Budget Added</h4>
+          </div>
+        </section>
     }
-    <MonthBudgetForm active={form} close={closeForm} onSubmit={submitForm} budget={{month, year, amount: 0}} />
+    <MonthBudgetForm active={form} close={closeForm} onSubmit={submitForm} budget={{ month, year, amount: 0 }} />
   </div>;
 }
 
@@ -74,15 +75,15 @@ let HoverBudgetSwitch: React.FC<{
     <button className="hover-container p-0 m-0 d-block">
       <div className="row fc-sec">
         <div className="col-3 g-0 dp02">
-          { props.years.length === 0
-          ? <div className="h-100 d-flex jc-center ai-center">
+          {props.years.length === 0
+            ? <div className="h-100 d-flex jc-center ai-center">
               <span>No Data</span>
             </div>
-          : props.years.map(y =>
-            <li className={(props.selectedYear === y ? 'btn' : 'py-2') + ' li-none m-0 font-sm hc-text text-center cursor-pointer'} key={y}
-              onClick={e => props.changeYear(y)} >
-              {y}
-            </li>)}
+            : props.years.map(y =>
+              <li className={(props.selectedYear === y ? 'btn' : 'py-2') + ' li-none m-0 font-sm hc-text text-center cursor-pointer'} key={y}
+                onClick={e => props.changeYear(y)} >
+                {y}
+              </li>)}
         </div>
         <div className="col-9 g-0">
           <div className="container">

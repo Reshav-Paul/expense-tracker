@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { getTheme } from './app/reducers/themeReducer';
 
 import { recentExpenses } from './app/constants/TestData';
 import { CHART_THEMES } from './app/constants/Themes';
 import ChartBuilder, { chartData } from './utilities/chart';
 import ExpenseItem from './components/ExpenseItem';
+import { getTheme } from './app/store';
 
 let Home: React.FC<{}> = function (props) {
     const recExpCanvas = useRef(null);

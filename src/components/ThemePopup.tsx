@@ -1,17 +1,16 @@
 import { useDispatch } from 'react-redux';
-import { change } from '../app/reducers/themeReducer';
 import THEMES, { ifTheme } from '../app/constants/Themes';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 
 import { themeType } from '../app/constants/Types';
+import { changeTheme } from '../app/reducers/profileReducer';
 
 let ThemePopup: React.FC<{ themes: ifTheme }> = function ThemePopup(props) {
     const dispatch = useDispatch();
     let handleThemeChange = function (key: string) {
-      let newTheme = THEMES[key];
-      dispatch(change(newTheme));
+      dispatch(changeTheme(key));
     }
   
     let themes: themeType[] = [];
