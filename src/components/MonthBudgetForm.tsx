@@ -22,7 +22,7 @@ let MonthBudgetForm: React.FC<{
 
     useEffect(() => changeMonth(props.budget.month), [props.budget.month]);
     useEffect(() => changeYear(props.budget.year), [props.budget.year]);
-    useEffect(() => changeAmount(budget.amount ? budget.amount.toString() : ''), [props.budget.amount]);
+    useEffect(() => changeAmount(props.budget.amount ? props.budget.amount.toString() : ''), [props.budget.amount]);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       e.preventDefault();

@@ -80,7 +80,7 @@
 .font-sm {
     font-size: 0.85rem;
 }
-#App-nav {
+#App-Sidebar {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -89,26 +89,26 @@
     min-width: 180px;
     background-color: var(--pr-transparent);
 }
-#App-nav > * {
+#App-Sidebar > * {
     padding: 1rem;
     border-left: 2px solid transparent;
     width: 100%;
     box-sizing: border-box;
 }
-#App-nav.collapsed {
+#App-Sidebar.collapsed {
     min-width: 60px;
     max-width: 60px;
     
 }
-#App-nav.collapsed .nav-label {
+#App-Sidebar.collapsed .sidebar-label {
     display: none;
 }
-#App-nav .nav-item {
+#App-Sidebar .sidebar-item {
     color: var(--font-sec-color);
     font-size: 0.9rem;
     font-weight: bold;
 }
-#App-nav .nav-item.selected {
+#App-Sidebar .sidebar-item.selected {
     background-color: #00000020;
     border-left: 2px solid var(--sec-color);
     color: var(--sec-color);
@@ -139,8 +139,8 @@
 }
 .has-dropdown .dropdown {
     position: absolute;
-    top: calc(100% + 20px);
-    right: 1%;
+    top: calc(100%);
+    right: calc(1% + 10px);
     min-width: 150px;
     max-width: 400px;
     background-color: var(--pr-color);
@@ -154,8 +154,11 @@
     width: 400px;
     max-width: 400px;
 }
-.dropdown li {
-    margin: 1rem;
+.dropdown > * {
+  padding-top: 0.8rem;
+}
+.dropdown > *:last-of-type {
+    padding-bottom: 0.5rem;
 }
 .has-dropdown:focus-within .dropdown {
     opacity: 1;
@@ -175,12 +178,12 @@
     scrollbar-color: var(--sec-color) var(--dark-transparent);
 }
 @media (max-width: 640px) {
-    #App-nav {
+    #App-Sidebar {
         min-width: 60px;
         max-width: 60px;
         align-items: center;
     }
-    #App-nav .nav-label {
+    #App-Sidebar .sidebar-label {
         display: none;
     }
 }

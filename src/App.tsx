@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import './App.css';
 import Home from './Home';
 import Month from './Month';
-import Navbar from './components/Nav';
+import SideBar from './components/Nav';
 import Year from './Year';
 import THEMES from './app/constants/Themes';
 import ThemePopup from './components/ThemePopup';
@@ -25,9 +25,9 @@ function App() {
   return (
     <div className="App" style={globalTheme}>
       <Router>
-        <header className="App-header">
-          <Navbar />
-        </header>
+        <section className="App-header">
+          <SideBar />
+        </section>
         <main className="App-main py-3">
           <Switch>
             <Route path="/annual">

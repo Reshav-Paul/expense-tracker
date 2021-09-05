@@ -9,8 +9,9 @@ import MonthBudgetForm from "./components/MonthBudgetForm";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseItem from "./components/ExpenseItem";
 import { updateMonthBudget } from "./app/reducers/monthlyBudgetReducer";
-import { addUserExpense, getExpenseByMonthYear, updateUserExpense } from "./app/reducers/expenseReducer";
+import { addUserExpense, deleteUserExpense, getExpenseByMonthYear, updateUserExpense } from "./app/reducers/expenseReducer";
 import { getExpenses } from "./app/store";
+import ConfirmPopup from "./components/ConfirmPopup";
 
 type propType = {
   budget: monthlyBudgetType,
@@ -23,6 +24,8 @@ const MonthMain: React.FC<propType> = function (props) {
   let [updateBudgetform, toggleUpdateBudgetform] = useState(false);
   let [addExpenseForm, toggleAddExpenseForm] = useState(false);
   let [editExpenseForm, toggleEditExpenseForm] = useState(false);
+  let [deleteExpensePopup, toggleDeletePopup] = useState(false);
+
   let expenseToUpdate = React.useRef({ id: '', name: '', amount: 0, date: '' });
 
   const dispatch = useDispatch();
@@ -49,6 +52,15 @@ const MonthMain: React.FC<propType> = function (props) {
     dispatch(updateUserExpense(newPayload));
   }
 
+  function deleteExpense(payload: expenseType) {
+    let newPayload = {
+      id: payload.id,
+      month: month,
+      year: year,
+    }
+    dispatch(deleteUserExpense(newPayload));
+  }
+
   function openEditExpenseForm(payload: expenseType) {
     expenseToUpdate.current = payload;
     toggleEditExpenseForm(true);
@@ -56,6 +68,14 @@ const MonthMain: React.FC<propType> = function (props) {
   function closeEditExpenseForm() {
     expenseToUpdate.current = { id: '', name: '', amount: 0, date: '' };
     toggleEditExpenseForm(false);
+  }
+  function openDeletePopup(payload: expenseType) {
+    expenseToUpdate.current = payload;
+    toggleDeletePopup(true);
+  }
+  function closeDeleteExpensePopup() {
+    expenseToUpdate.current = { id: '', name: '', amount: 0, date: '' };
+    toggleDeletePopup(false);
   }
 
   return <section className="container-fluid mt-2">
@@ -78,7 +98,8 @@ const MonthMain: React.FC<propType> = function (props) {
         <div className="col12">
           <h6 className="fc-pr">Expenses</h6>
         </div>
-        <ExpenseList month={month} year={year} onEdit={openEditExpenseForm} />
+        <ExpenseList month={month} year={year} onEdit={openEditExpenseForm}
+          onDelete={openDeletePopup} />
       </div>
       <div className="col-4 col-md-6 col-sm-12 g-0"></div>
     </div>
@@ -90,12 +111,17 @@ const MonthMain: React.FC<propType> = function (props) {
 
     <ExpenseForm active={editExpenseForm} close={closeEditExpenseForm} mode={"update"}
       submit={submitUpdatedExpense} expense={expenseToUpdate.current} />
+
+    <ConfirmPopup active={deleteExpensePopup} onCancel={closeDeleteExpensePopup}
+      payload={expenseToUpdate.current} onConfirm={deleteExpense}
+      message={`Are you sure you want to delete ${expenseToUpdate.current.name}?`} />
   </section>;
 }
 
 let ExpenseList: React.FC<{
   year: number, month: number,
-  onEdit?: (payload: expenseType) => void
+  onEdit?: (payload: expenseType) => void,
+  onDelete?: (payload: expenseType) => void,
 }> = function (props) {
   let { month, year } = props;
   let state = useSelector(getExpenses);
@@ -109,7 +135,8 @@ let ExpenseList: React.FC<{
     <ul className="row">
       {
         expenses.map(exp => <li key={exp.id} className="col-6 col-md-12 col-sm-6 col-xs-12">
-          <ExpenseItem expense={exp} allowEdit={true} onClick={props.onEdit} />
+          <ExpenseItem expense={exp} allowEdit={true} onClick={props.onEdit}
+            allowDelete={true} onDelete={props.onDelete} />
         </li>)
       }
     </ul>

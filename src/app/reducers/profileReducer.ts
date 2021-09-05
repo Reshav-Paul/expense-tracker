@@ -1,5 +1,5 @@
 import THEMES from '../constants/Themes';
-import { actionType, headerType, profileType, themeType } from '../constants/Types';
+import { actionType, headerType, profileType } from '../constants/Types';
 import { createReducer, updateObject } from './stateHandlerUtilities';
 
 const initialState: profileType = {

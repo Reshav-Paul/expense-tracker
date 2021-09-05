@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import THEMES, { ifTheme } from '../app/constants/Themes';
+import { ifTheme } from '../app/constants/Themes';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
@@ -8,29 +8,29 @@ import { themeType } from '../app/constants/Types';
 import { changeTheme } from '../app/reducers/profileReducer';
 
 let ThemePopup: React.FC<{ themes: ifTheme }> = function ThemePopup(props) {
-    const dispatch = useDispatch();
-    let handleThemeChange = function (key: string) {
-      dispatch(changeTheme(key));
-    }
-  
-    let themes: themeType[] = [];
-    for (let t in props.themes) {
-      themes.push(props.themes[t]);
-    }
-    return <div id="theme-btn" className="has-dropdown col-2 text-right">
-      <button className="bg-pr">
-        <FontAwesomeIcon icon={faPalette} className="icon lg"></FontAwesomeIcon>
-      </button>
-      <ul className="dropdown">
-        {
-          themes.map(t => <li key={t.key}>
-            <button style={{ color: t.secColor }}
-              className="bg-pr"
-              onClick={e => handleThemeChange(t.key)}>{t.label}</button>
-          </li>)
-        }
-      </ul>
-    </div>;
+  const dispatch = useDispatch();
+  let handleThemeChange = function (key: string) {
+    dispatch(changeTheme(key));
   }
 
-  export default ThemePopup;
+  let themes: themeType[] = [];
+  for (let t in props.themes) {
+    themes.push(props.themes[t]);
+  }
+  return <div id="theme-btn" className="has-dropdown col-2 text-right">
+    <button className="bg-pr">
+      <FontAwesomeIcon icon={faPalette} className="icon lg"></FontAwesomeIcon>
+    </button>
+    <div className="dropdown d-flex flex-col ai-stretch">
+      {
+        themes.map(t => <button key={t.key} className="d-block bg-pr"
+          style={{ color: t.secColor, textAlign: 'left' }}
+          onClick={e => handleThemeChange(t.key)}>
+          {t.label}
+        </button>)
+      }
+    </div>
+  </div>;
+}
+
+export default ThemePopup;

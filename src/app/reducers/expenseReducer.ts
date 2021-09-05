@@ -63,11 +63,13 @@ function deleteExpense(state: expenseCollection[], action: actionType) {
   let expenseCollection: expenseCollection = state.filter(ec => ec.month === month && ec.year === year)[0];
   if (!expenseCollection) return state;
 
-  expenseCollection.expenses = expenseCollection.expenses.filter(ep => ep.id !== id);
+  let newExpenses = expenseCollection.expenses.filter(ep => ep.id !== id);
+  let newExpCollection = updateObject(expenseCollection, { expenses: newExpenses });
+
   state = updateItemInArrayByPredicate(
     state,
     function (ec: expenseCollection) { return ec.month === month && ec.year === year; },
-    () => expenseCollection
+    () => newExpCollection
   );
   return state;
 }
