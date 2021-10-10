@@ -21,10 +21,10 @@ let ThemePopup: React.FC<{ themes: ifTheme }> = function ThemePopup(props) {
     <button className="bg-pr">
       <FontAwesomeIcon icon={faPalette} className="icon lg"></FontAwesomeIcon>
     </button>
-    <div className="dropdown d-flex flex-col ai-stretch">
+    <div className="dropdown d-flex flex-col ai-stretch dp01">
       {
-        themes.map(t => <button key={t.key} className="d-block bg-pr"
-          style={{ color: t.secColor, textAlign: 'left' }}
+        themes.map(t => <button key={t.key} className="d-block"
+          style={{ color: t.secColor, textAlign: 'left', backgroundColor: 'hsla(0, 100%, 100%, 0.05)' }}
           onClick={e => handleThemeChange(t.key)}>
           {t.label}
         </button>)

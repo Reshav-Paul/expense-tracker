@@ -31,12 +31,6 @@ function App() {
         <main className="App-main py-3">
           <Switch>
             <Route path="/annual">
-              <div className="container-fluid">
-                <div className="row">
-                  <h3 className="hc-text col-10">Annual</h3>
-                  <ThemePopup themes={THEMES} />
-                </div>
-              </div>
               <Year />
             </Route>
             <Route path="/monthly">

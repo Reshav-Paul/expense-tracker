@@ -155,10 +155,8 @@
     max-width: 400px;
 }
 .dropdown > * {
-  padding-top: 0.8rem;
-}
-.dropdown > *:last-of-type {
-    padding-bottom: 0.5rem;
+  padding: 0.8rem 0.6rem;
+  margin: 0 !important;
 }
 .has-dropdown:focus-within .dropdown {
     opacity: 1;

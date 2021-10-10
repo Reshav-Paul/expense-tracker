@@ -40,7 +40,7 @@ let ExpenseItem: React.FC<{
             : null
         }
         {
-          props.allowEdit
+          props.allowDelete
             ? <FontAwesomeIcon className="icon" icon={faTrash} onClick={e => {
               e.preventDefault();
               props.onDelete && props.onDelete(expense);

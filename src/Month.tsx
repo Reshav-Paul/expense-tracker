@@ -5,12 +5,11 @@ import MonthBudgetForm from './components/MonthBudgetForm';
 import { monthMap, monthArray } from './app/constants/utilityData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
-import ThemePopup from './components/ThemePopup';
-import THEMES from './app/constants/Themes';
 import MonthMain from './MonthMain';
 import { monthlyBudgetType } from './app/constants/Types';
 import { addMonthBudget, getBudgetByMonthYear, getYearsFromMonthBudget } from './app/reducers/monthlyBudgetReducer';
 import { getMonthBudgets } from './app/store';
+import Titlebar from './components/Titlebar';
 
 let Month: React.FC<{}> = function (props) {
   const dispatch = useDispatch();
@@ -30,10 +29,7 @@ let Month: React.FC<{}> = function (props) {
   let yearsInData = getYearsFromMonthBudget(state);
 
   return <div className="container-fluid h-100">
-    <div className="row">
-      <h4 className="hc-text col-10">Month</h4>
-      <ThemePopup themes={THEMES} />
-    </div>
+    <Titlebar title={'Month'} />
     <section className="container-fluid">
       <div className="row">
         <div className="col-10 col-md-9 col-sm-8 g-0">
