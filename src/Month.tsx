@@ -8,12 +8,13 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 import MonthMain from './MonthMain';
 import { monthlyBudgetType } from './app/constants/Types';
 import { addMonthBudget, getBudgetByMonthYear, getYearsFromMonthBudget } from './app/reducers/monthlyBudgetReducer';
-import { getMonthBudgets } from './app/store';
+import { getMonthBudgets, getYearBudgets } from './app/store';
 import Titlebar from './components/Titlebar';
 
 let Month: React.FC<{}> = function (props) {
   const dispatch = useDispatch();
   const state = useSelector(getMonthBudgets);
+  let yearBudgets = useSelector(getYearBudgets);
 
   let [month, changeMonth] = useState(1);
   let [year, changeYear] = useState((new Date()).getFullYear());
@@ -22,6 +23,11 @@ let Month: React.FC<{}> = function (props) {
   let closeForm = () => showForm(false);
 
   function submitForm(payload: monthlyBudgetType) {
+    let yearBudget = yearBudgets.filter(b => b.year === payload.year)[0];
+    if (!yearBudget) {
+      console.log('Year Budget Not Added');
+      return;
+    }
     dispatch(addMonthBudget(payload));
   }
 

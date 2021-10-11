@@ -14,9 +14,9 @@ let AnnualBudgetForm: React.FC<{
 }> = function (props) {
 
   let { budget } = props;
-  let currentYear = (new Date()).getFullYear();
+  // let currentYear = (new Date()).getFullYear();
 
-  let [year, changeYear] = useState(budget.year || currentYear);
+  let [year, changeYear] = useState(budget.year);
   let [amount, changeAmount] = useState(budget.amount ? budget.amount.toString() : '');
 
   useEffect(() => changeYear(props.budget.year), [props.budget.year]);
