@@ -7,11 +7,6 @@ type themeType = {
   fontSecColor: string
 };
 
-type headerType = {
-  currentYearBudget?: number,
-  currentMonthBudget?: number,
-}
-
 type monthlyBudgetType = {
   year: number,
   month: number,
@@ -27,7 +22,7 @@ type profileType = {
   firstName: string,
   lastName?: string,
   username: string,
-  currentBudget: headerType,
+  email: string,
   currentTheme: themeType,
 }
 type expenseType = {
@@ -52,11 +47,21 @@ type stateType = {
 
 export type {
   themeType, yearlyBudgetType, monthlyBudgetType,
-  headerType, expenseType, expenseCollection,
+  expenseType, expenseCollection,
   profileType, stateType
 };
 
 export type actionType = {
   type: string,
   payload: any,
+}
+
+export type chartColorScheme = {
+  accent1: string,
+  accent2: string,
+  accent3: string,
+  accent4: string,
+  accent5: string,
+  accent6: string,
+  accent7: string
 }

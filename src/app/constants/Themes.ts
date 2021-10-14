@@ -1,5 +1,4 @@
-import { themeType } from "./Types";
-import { chartColorScheme } from '../../utilities/chart';
+import { themeType, chartColorScheme } from "./Types";
 
 const RED_WAR: themeType = {
     key: 'RED_WAR',

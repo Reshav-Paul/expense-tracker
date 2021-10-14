@@ -1,12 +1,12 @@
 import THEMES from '../constants/Themes';
-import { actionType, headerType, profileType } from '../constants/Types';
+import { actionType, profileType } from '../constants/Types';
 import { createReducer, updateObject } from './stateHandlerUtilities';
 
 const initialState: profileType = {
   firstName: '',
   lastName: '',
   username: '',
-  currentBudget: { currentMonthBudget: 0, currentYearBudget: 0 },
+  email: '',
   currentTheme: THEMES.DARK_NIGHTS,
 }
 
@@ -16,22 +16,6 @@ function updatePersonalInfo(state: profileType, action: actionType) {
   }
   if (action.payload.lastName) {
     state.lastName = action.payload.lastName;
-  }
-
-  return state;
-}
-
-function updateCurrentBudget(state: profileType, action: actionType) {
-  let newCurrBudget: headerType = action.payload;
-
-  if (newCurrBudget.currentMonthBudget &&
-    newCurrBudget.currentMonthBudget >= 0) {
-    state.currentBudget.currentMonthBudget = newCurrBudget.currentMonthBudget;
-  }
-
-  if (newCurrBudget.currentYearBudget &&
-    newCurrBudget.currentYearBudget >= 0) {
-    state.currentBudget.currentYearBudget = newCurrBudget.currentYearBudget;
   }
 
   return state;
@@ -47,7 +31,6 @@ function updateTheme(state: profileType, action: actionType) {
 
 const profileReducer = createReducer(initialState, {
   'profile/personal/update': updatePersonalInfo,
-  'profile/budget/update': updateCurrentBudget,
   'profile/theme/update': updateTheme,
 });
 
