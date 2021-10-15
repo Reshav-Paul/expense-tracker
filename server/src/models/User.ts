@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-import { UserType, mUserType } from '../types/types';
+import { UserType, mUserType } from '../utilities/types/types';
 
 const Schema = mongoose.Schema;
 
@@ -31,4 +31,11 @@ UserSchema.pre('save', function (next) {
     );
 });
 
-module.exports = mongoose.model<mUserType>('User', UserSchema);
+UserSchema.pre(/^find/, function (next) {
+    let doc = this;
+    doc.select('-__v');
+    next();
+});
+
+let User = mongoose.model<mUserType>('User', UserSchema);
+export default User;

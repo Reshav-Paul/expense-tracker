@@ -6,13 +6,14 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
+        "rootDir": "src",
         "outDir": "bin",
         "baseUrl": ".",
         "strict": true,
         "paths": {
             "*": [
                 "node_modules/*",
-                "src/types/*"
+                "src/utilities/types/*"
             ]
         }
     },

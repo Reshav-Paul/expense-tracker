@@ -29,5 +29,11 @@ UserSchema.pre('save', function (next) {
         });
     });
 });
-module.exports = mongoose_1.default.model('User', UserSchema);
+UserSchema.pre(/^find/, function (next) {
+    let doc = this;
+    doc.select('-__v');
+    next();
+});
+let User = mongoose_1.default.model('User', UserSchema);
+exports.default = User;
 //# sourceMappingURL=User.js.map

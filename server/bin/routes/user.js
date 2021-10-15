@@ -21,10 +21,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const user_controller = __importStar(require("../controllers/user_controller"));
-let router = (0, express_1.Router)();
-router.post('/signup', user_controller.user_signup);
-router.post('/login', user_controller.user_login);
-router.post('/logout', user_controller.user_logout);
-router.get('/:id', user_controller.user_get_by_id);
-module.exports = router;
+const auth_controller = __importStar(require("../controllers/auth_controller"));
+const auth_middlewares_1 = require("../utilities/middlewares/auth_middlewares");
+let userRouter = (0, express_1.Router)();
+userRouter.post('/signup', user_controller.user_signup);
+userRouter.post('/login', auth_controller.user_login);
+// userRouter.post('/logout', user_controller.user_logout);
+userRouter.get('/:id', auth_controller.user_auth, auth_middlewares_1.validateUserIdInParam, user_controller.user_get_by_id);
+exports.default = userRouter;
 //# sourceMappingURL=user.js.map

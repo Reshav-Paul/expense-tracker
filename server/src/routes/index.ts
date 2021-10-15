@@ -1,9 +1,9 @@
 import { Router } from 'express';
-var router = Router();
+var indexRouter = Router();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+indexRouter.get('/', function (req, res, next) {
   res.json({ 'message': 'ExSpender API' });
 });
 
-module.exports = router;
+export default indexRouter;

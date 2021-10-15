@@ -9,8 +9,7 @@ let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let mongoose = require('mongoose');
-let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/user');
+const passport_1 = __importDefault(require("passport"));
 let app = (0, express_1.default)();
 mongoose.connect(process.env.mongoDbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.set('returnOriginal', false);
@@ -21,14 +20,20 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express_1.default.static(path.join(__dirname, 'public')));
-app.use('/', indexRouter);
-app.use('/user', usersRouter);
+app.use(passport_1.default.initialize());
+const user_1 = __importDefault(require("./routes/user"));
+const index_1 = __importDefault(require("./routes/index"));
+app.use('/', index_1.default);
+app.use('/user', user_1.default);
 let defaultHandler = function (err, req, res, next) {
     // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-    res.status(err.status || 500).send(err.message);
-    res.send(req.app.get('env'));
+    if (err.message) {
+        console.log(err.message);
+        res.locals.message = err.message;
+        res.locals.error = req.app.get('env') === 'development' ? err : {};
+        res.status(err.status || 500).send(err.message);
+        res.send(req.app.get('env'));
+    }
 };
 app.use(defaultHandler);
 // module.exports = app;

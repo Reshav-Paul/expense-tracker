@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { Request, Response, NextFunction } from "express";
 
 export type UserType = {
     firstname: string,
