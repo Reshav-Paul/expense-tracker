@@ -12,27 +12,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.user_auth = exports.user_login = void 0;
+exports.user_logout = exports.user_auth = exports.user_login = exports.userLoginValidation = void 0;
 const passport_1 = __importDefault(require("passport"));
 const passport_jwt_1 = __importDefault(require("passport-jwt"));
 const passport_local_1 = require("passport-local");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
+const error_messages_1 = require("../utilities/error/error_messages");
 const JwtStrategy = passport_jwt_1.default.Strategy;
 const ExtractJwt = passport_jwt_1.default.ExtractJwt;
+exports.userLoginValidation = [
+    (0, express_validator_1.body)('email', error_messages_1.userErrors.noEmail).exists().bail().trim().notEmpty(),
+    (0, express_validator_1.body)('email', error_messages_1.userErrors.invalidEmail).exists().bail().optional({ checkFalsy: true }).isEmail(),
+    (0, express_validator_1.body)('password', error_messages_1.userErrors.noPassword).exists().bail().trim().notEmpty(),
+];
 let userLoginVerify = function userLoginVerify(email, password, done) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let user = yield User_1.default.findOne({ email: email }).select('+email +password').lean();
             if (!user) {
-                return done(null, false, { message: 'User not found' });
+                return done(null, false, { message: error_messages_1.userErrors.noUserFound });
             }
             let compareSuccess = yield bcryptjs_1.default.compare(password, user.password);
             if (compareSuccess)
                 return done(null, user);
             else
-                return done(null, false, { message: 'Wrong Password' });
+                return done(null, false, { message: error_messages_1.userErrors.wrongPassword });
         }
         catch (e) {
             return done(e);
@@ -67,13 +74,21 @@ let jwtStrategyOptions = {
 };
 passport_1.default.use('user-auth', new JwtStrategy(jwtStrategyOptions, userAuthVerify));
 let user_login = function userLogin(req, res, next) {
+    const errors = (0, express_validator_1.validationResult)(req);
+    if (!errors.isEmpty()) {
+        res.json({
+            error: { status: 'Validation_Error', errors: errors.array() }
+        });
+        return;
+    }
     passport_1.default.authenticate('user-login', function (err, user, message) {
         if (err || !user) {
             if (message) {
                 res.status(400).json(message);
                 return;
             }
-            return next(new Error('An Error Occured during Login! Please try Again.'));
+            res.status(400).json({ message: error_messages_1.userErrors.loginDefaultError });
+            return;
         }
         req.login(user, { session: false }, err => {
             if (err)
@@ -91,4 +106,9 @@ let user_login = function userLogin(req, res, next) {
 };
 exports.user_login = user_login;
 exports.user_auth = passport_1.default.authenticate('user-auth', { session: false });
+let user_logout = function (req, res, next) {
+    req.logout();
+    res.json({ logout: true });
+};
+exports.user_logout = user_logout;
 //# sourceMappingURL=auth_controller.js.map

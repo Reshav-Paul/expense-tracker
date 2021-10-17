@@ -24,7 +24,7 @@ app.use(passport_1.default.initialize());
 const user_1 = __importDefault(require("./routes/user"));
 const index_1 = __importDefault(require("./routes/index"));
 app.use('/', index_1.default);
-app.use('/user', user_1.default);
+app.use('/users', user_1.default);
 let defaultHandler = function (err, req, res, next) {
     // set locals, only providing error in development
     if (err.message) {

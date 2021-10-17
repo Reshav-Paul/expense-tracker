@@ -22,11 +22,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const user_controller = __importStar(require("../controllers/user_controller"));
 const auth_controller = __importStar(require("../controllers/auth_controller"));
-const auth_middlewares_1 = require("../utilities/middlewares/auth_middlewares");
+const validation_middlewares_1 = require("../utilities/middlewares/validation_middlewares");
 let userRouter = (0, express_1.Router)();
-userRouter.post('/signup', user_controller.user_signup);
-userRouter.post('/login', auth_controller.user_login);
-// userRouter.post('/logout', user_controller.user_logout);
-userRouter.get('/:id', auth_controller.user_auth, auth_middlewares_1.validateUserIdInParam, user_controller.user_get_by_id);
+userRouter.post('/signup', ...user_controller.userCreationValidation, user_controller.user_create);
+userRouter.post('/login', ...auth_controller.userLoginValidation, auth_controller.user_login);
+userRouter.post('/logout', auth_controller.user_logout);
+userRouter.get('/:id', auth_controller.user_auth, validation_middlewares_1.validateUserIdInParam, user_controller.user_get_by_id);
+userRouter.put('/:id', auth_controller.user_auth, validation_middlewares_1.validateUserIdInParam, ...user_controller.userUpdationValidation, user_controller.user_update);
 exports.default = userRouter;
 //# sourceMappingURL=user.js.map

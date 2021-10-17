@@ -9,4 +9,9 @@ export type UserType = {
     password: string
 }
 
+export type UserUpdateType = {
+    firstname?: string,
+    lastname?: string,
+}
+
 export type mUserType = UserType & Document;

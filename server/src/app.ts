@@ -24,7 +24,7 @@ import userRouter from './routes/user';
 import indexRouter from './routes/index';
 
 app.use('/', indexRouter);
-app.use('/user', userRouter);
+app.use('/users', userRouter);
 
 let defaultHandler: express.ErrorRequestHandler = function (err, req, res, next) {
     // set locals, only providing error in development
