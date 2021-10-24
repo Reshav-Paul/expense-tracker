@@ -1,25 +1,35 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateUserIdInParam = exports.validateMongoId = void 0;
-const validator_1 = __importDefault(require("validator"));
+exports.authenticateUserIdInBody = exports.authenticateUserIdInParam = exports.validateParamIdAndRespond = void 0;
 const error_messages_1 = require("../error/error_messages");
-let validateMongoId = function validateMongoId(id) {
-    return validator_1.default.isMongoId(id);
+const customValidators_1 = require("../helpers/customValidators");
+let validateParamIdAndRespond = function (req, res, next) {
+    if (!(0, customValidators_1.validateMongoId)(req.params.id)) {
+        res.status(400).json({ error: error_messages_1.generalErrors.invalidMongoId });
+        return;
+    }
 };
-exports.validateMongoId = validateMongoId;
-let validateUserIdInParam = function (req, res, next) {
-    if (!(0, exports.validateMongoId)(req.params.id)) {
+exports.validateParamIdAndRespond = validateParamIdAndRespond;
+let authenticateUserIdInParam = function (req, res, next) {
+    if (!(0, customValidators_1.validateMongoId)(req.params.id)) {
         res.status(400).json({ message: error_messages_1.generalErrors.invalidMongoId });
         return;
     }
     if (req.user._id.toString() === req.params.id) {
-        next();
-        return;
+        return next();
     }
     res.status(401).send('Unauthorized');
 };
-exports.validateUserIdInParam = validateUserIdInParam;
+exports.authenticateUserIdInParam = authenticateUserIdInParam;
+let authenticateUserIdInBody = function (param, req, res, next) {
+    if (!(0, customValidators_1.validateMongoId)(req.body[param])) {
+        res.status(400).json({ parameter: param, error: error_messages_1.generalErrors.invalidMongoId });
+        return;
+    }
+    if (req.user._id.toString() === req.body[param]) {
+        return next();
+    }
+    res.status(401).send('Unauthorized');
+};
+exports.authenticateUserIdInBody = authenticateUserIdInBody;
 //# sourceMappingURL=validation_middlewares.js.map

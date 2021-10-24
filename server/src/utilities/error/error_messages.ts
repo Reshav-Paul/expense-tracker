@@ -16,3 +16,13 @@ export let userErrors = {
 export let generalErrors = {
     invalidMongoId: 'Invalid ID',
 }
+
+export let yearBudgetErrors = {
+    notFound: 'No Budget Found for this Year',
+    yearNotPresent: 'Year is mandatory',
+    budgetNotPresent: 'Budget is mandatory',
+    invalidYear: 'This year is not valid',
+    invalidBudget: 'This budget is not valid',
+    userIdNotPresent: 'User ID is mandatory',
+    budgetExists: 'Budget has already been created',
+}

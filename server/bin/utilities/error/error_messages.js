@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generalErrors = exports.userErrors = void 0;
+exports.yearBudgetErrors = exports.generalErrors = exports.userErrors = void 0;
 exports.userErrors = {
     duplicateEmail: 'Email already signed up',
     noFirstname: 'First Name is required',
@@ -17,5 +17,14 @@ exports.userErrors = {
 };
 exports.generalErrors = {
     invalidMongoId: 'Invalid ID',
+};
+exports.yearBudgetErrors = {
+    notFound: 'No Budget Found for this Year',
+    yearNotPresent: 'Year is mandatory',
+    budgetNotPresent: 'Budget is mandatory',
+    invalidYear: 'This year is not valid',
+    invalidBudget: 'This budget is not valid',
+    userIdNotPresent: 'User ID is mandatory',
+    budgetExists: 'Budget has already been created',
 };
 //# sourceMappingURL=error_messages.js.map

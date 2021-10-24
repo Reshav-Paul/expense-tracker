@@ -1,5 +1,4 @@
-import { Document } from 'mongoose';
-import { Request, Response, NextFunction } from "express";
+import { Document, Types } from 'mongoose';
 
 export type UserType = {
     firstname: string,
@@ -15,3 +14,17 @@ export type UserUpdateType = {
 }
 
 export type mUserType = UserType & Document;
+
+export type YearBudgetType = {
+    userId: Types.ObjectId,
+    year: number,
+    budget: number,
+}
+
+export type YearBudgetOptionalType = {
+    userId?: Types.ObjectId,
+    year?: number,
+    budget?: number,
+}
+
+export type mYearBudgetType = YearBudgetType & Document;
