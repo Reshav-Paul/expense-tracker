@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
-import { body, check, validationResult } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 
 import { UserType, UserUpdateType } from '../utilities/types/types';
 import User from '../models/User';
-import { userErrors, generalErrors } from '../utilities/error/error_messages';
+import { userErrors } from '../utilities/error/error_messages';
 
 export let userCreationValidation = [
     body('firstname', userErrors.noFirstname).exists().bail().trim().notEmpty(),
@@ -60,7 +60,11 @@ export let user_create: RequestHandler = async function (req, res, next) {
 export let user_get_by_id: RequestHandler = async function (req, res, next) {
     try {
         let user = await User.findById(req.params.id).lean();
-        res.status(200).json(user).end();
+        if (!user) {
+            res.status(404).json({ error: userErrors.noUserFound });
+            return;
+        }
+        res.status(200).json(user);
     } catch (e) {
         res.status(404).json(e);
     }
@@ -79,17 +83,22 @@ export let user_update: RequestHandler = async function (req, res, next) {
     if (req.body.firstname) userData.firstname = req.body.firstname;
     if (req.body.lastname) userData.lastname = req.body.lastname;
 
+    let currentUser = await User.findById(req.params.id).lean();
+    if (!currentUser) {
+        res.status(400).json({ error: userErrors.noUserFound });
+        return;
+    }
+
     try {
         if (Object.keys(userData).length === 0) {
-            let user = await User.findById(req.params.id).lean();
-            res.status(200).json(user).end();
+            res.status(200).json(currentUser);
         } else {
             let updatedUser = await User.findByIdAndUpdate(req.params.id, userData);
             res.status(200).json(updatedUser);
         }
 
     } catch (e) {
-        res.status(404).json(e);
+        res.status(400).json(e);
     }
 
 }

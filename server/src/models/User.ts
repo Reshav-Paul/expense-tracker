@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-import { UserType, mUserType } from '../utilities/types/types';
+import { mUserType } from '../utilities/types/types';
 
 const Schema = mongoose.Schema;
 
@@ -15,7 +15,7 @@ let UserSchema = new Schema({
 
 UserSchema.virtual('url').get(function (this: mUserType) {
     return '/user/' + this._id;
-})
+});
 
 UserSchema.pre('save', function (next) {
     let doc = this;
