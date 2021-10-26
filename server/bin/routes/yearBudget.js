@@ -29,6 +29,7 @@ let authUserFromBody = function (req, res, next) {
 };
 yearBudgetRouter.post('/', auth_controller.user_auth, ...year_budget_controller.yearBudgetCreationValidation, authUserFromBody, year_budget_controller.year_budget_create);
 yearBudgetRouter.get('/', auth_controller.user_auth, year_budget_controller.year_budget_get_all);
-yearBudgetRouter.get('/:id', auth_controller.user_auth, year_budget_controller.year_budget_get_by_id);
+yearBudgetRouter.get('/:id', auth_controller.user_auth, validation_middlewares_1.validateParamIdAndRespond, year_budget_controller.year_budget_get_by_id);
+yearBudgetRouter.put('/:id', auth_controller.user_auth, validation_middlewares_1.validateParamIdAndRespond, ...year_budget_controller.yearBudgetUpdationValidation, year_budget_controller.year_budget_update_by_id);
 exports.default = yearBudgetRouter;
 //# sourceMappingURL=yearBudget.js.map

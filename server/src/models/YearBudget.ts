@@ -14,5 +14,11 @@ YearBudgetSchema.virtual('url').get(function (this: mYearBudgetType) {
     return '/budgets/year/' + this._id;
 });
 
+YearBudgetSchema.pre(/^find/, function (next) {
+    let doc = this;
+    doc.select('-__v');
+    next();
+});
+
 let YearBudget = mongoose.model<mYearBudgetType>('YearBudget', YearBudgetSchema);
 export default YearBudget;

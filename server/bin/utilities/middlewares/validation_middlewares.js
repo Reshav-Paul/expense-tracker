@@ -8,6 +8,7 @@ let validateParamIdAndRespond = function (req, res, next) {
         res.status(400).json({ error: error_messages_1.generalErrors.invalidMongoId });
         return;
     }
+    return next();
 };
 exports.validateParamIdAndRespond = validateParamIdAndRespond;
 let authenticateUserIdInParam = function (req, res, next) {
@@ -23,7 +24,20 @@ let authenticateUserIdInParam = function (req, res, next) {
 exports.authenticateUserIdInParam = authenticateUserIdInParam;
 let authenticateUserIdInBody = function (param, req, res, next) {
     if (!(0, customValidators_1.validateMongoId)(req.body[param])) {
-        res.status(400).json({ parameter: param, error: error_messages_1.generalErrors.invalidMongoId });
+        let errorBody = {
+            error: {
+                status: 'Validation_Error',
+                errors: [
+                    {
+                        value: req.body[param],
+                        msg: error_messages_1.generalErrors.invalidMongoId,
+                        param,
+                        location: 'body'
+                    }
+                ]
+            }
+        };
+        res.status(400).json(errorBody);
         return;
     }
     if (req.user._id.toString() === req.body[param]) {

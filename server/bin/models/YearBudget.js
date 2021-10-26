@@ -13,6 +13,11 @@ const YearBudgetSchema = new Schema({
 YearBudgetSchema.virtual('url').get(function () {
     return '/budgets/year/' + this._id;
 });
+YearBudgetSchema.pre(/^find/, function (next) {
+    let doc = this;
+    doc.select('-__v');
+    next();
+});
 let YearBudget = mongoose_1.default.model('YearBudget', YearBudgetSchema);
 exports.default = YearBudget;
 //# sourceMappingURL=YearBudget.js.map

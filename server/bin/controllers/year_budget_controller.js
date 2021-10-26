@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.year_budget_get_all = exports.year_budget_get_by_id = exports.year_budget_create = exports.yearBudgetCreationValidation = void 0;
+exports.year_budget_update_by_id = exports.year_budget_get_all = exports.year_budget_get_by_id = exports.year_budget_create = exports.yearBudgetUpdationValidation = exports.yearBudgetCreationValidation = void 0;
 const express_validator_1 = require("express-validator");
 const customValidators_1 = require("../utilities/helpers/customValidators");
 const YearBudget_1 = __importDefault(require("../models/YearBudget"));
@@ -35,6 +35,12 @@ exports.yearBudgetCreationValidation = [
     (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.invalidBudget).optional().isNumeric().custom(customValidators_1.budgetValidator),
     (0, express_validator_1.body)('userId', error_messages_1.yearBudgetErrors.userIdNotPresent).exists().notEmpty().trim(),
     (0, express_validator_1.body)('userId', error_messages_1.generalErrors.invalidMongoId).optional({ checkFalsy: true }).isMongoId(),
+];
+exports.yearBudgetUpdationValidation = [
+    (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.yearNotPresent).exists().notEmpty().trim(),
+    (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(customValidators_1.validateYear),
+    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.budgetNotPresent).exists().notEmpty().trim(),
+    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.invalidBudget).optional().isNumeric().custom(customValidators_1.budgetValidator),
 ];
 let year_budget_create = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -75,7 +81,7 @@ let year_budget_get_by_id = function (req, res, next) {
                 res.status(404).json({ error: error_messages_1.yearBudgetErrors.notFound });
             }
             else {
-                if (yearBudget.userId !== req.user._id) {
+                if (yearBudget.userId.toString() !== req.user._id.toString()) {
                     res.status(401).send('Unauthorized');
                     return;
                 }
@@ -104,4 +110,42 @@ let year_budget_get_all = function (req, res, next) {
     });
 };
 exports.year_budget_get_all = year_budget_get_all;
+let year_budget_update_by_id = function (req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let yearBudget = yield YearBudget_1.default.findById(req.params.id).lean();
+            if (!yearBudget) {
+                res.status(404).json({ error: error_messages_1.yearBudgetErrors.notFound });
+            }
+            else {
+                if (yearBudget.userId.toString() !== req.user._id.toString()) {
+                    res.status(401).send('Unauthorized');
+                    return;
+                }
+            }
+        }
+        catch (err) {
+            return next(err);
+        }
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            res.status(400).json({
+                error: { status: 'Validation_Error', errors: errors.array() }
+            });
+            return;
+        }
+        try {
+            let updateData = {
+                year: req.body.year,
+                budget: req.body.budget,
+            };
+            let newBudget = yield YearBudget_1.default.findByIdAndUpdate(req.params.id, updateData);
+            res.json(newBudget);
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+};
+exports.year_budget_update_by_id = year_budget_update_by_id;
 //# sourceMappingURL=year_budget_controller.js.map
