@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const YearBudgetSchema = new Schema({
-    userId: Schema.Types.ObjectId,
-    year: { type: Schema.Types.Number, required: true },
+    userId: { type: Schema.Types.ObjectId, required: true },
+    year: { type: Schema.Types.Number, required: true, unique: true },
     budget: { type: Schema.Types.Number, required: true },
 });
 YearBudgetSchema.virtual('url').get(function () {

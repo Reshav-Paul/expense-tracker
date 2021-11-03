@@ -1,14 +1,14 @@
 import { RequestHandler } from "express";
 import { body, validationResult } from 'express-validator';
 
-import { budgetValidator, validateYear } from "../utilities/helpers/customValidators";
-import { YearBudgetOptionalType, YearBudgetType } from "types";
+import { budgetValidator, yearValidator, isValidYear } from "../utilities/helpers/customValidators";
+import { YearBudgetOptionalType, YearBudgetType } from "../utilities/types/types";
 import YearBudget from "../models/YearBudget";
 import { generalErrors, yearBudgetErrors } from '../utilities/error/error_messages';
 
 export let yearBudgetCreationValidation = [
     body('year', yearBudgetErrors.yearNotPresent).exists().notEmpty().trim(),
-    body('year', yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(validateYear),
+    body('year', yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(yearValidator),
     body('budget', yearBudgetErrors.budgetNotPresent).exists().notEmpty().trim(),
     body('budget', yearBudgetErrors.invalidBudget).optional().isNumeric().custom(budgetValidator),
     body('userId', yearBudgetErrors.userIdNotPresent).exists().notEmpty().trim(),
@@ -17,7 +17,7 @@ export let yearBudgetCreationValidation = [
 
 export let yearBudgetUpdationValidation = [
     body('year', yearBudgetErrors.yearNotPresent).exists().notEmpty().trim(),
-    body('year', yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(validateYear),
+    body('year', yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(yearValidator),
     body('budget', yearBudgetErrors.budgetNotPresent).exists().notEmpty().trim(),
     body('budget', yearBudgetErrors.invalidBudget).optional().isNumeric().custom(budgetValidator),
 ];
@@ -72,7 +72,13 @@ export let year_budget_get_by_id: RequestHandler = async function (req: any, res
 
 export let year_budget_get_all: RequestHandler = async function (req: any, res, next) {
     let queryOptions: YearBudgetOptionalType = {};
-    if (req.query.year) queryOptions.year = req.query.year;
+    if (req.query.year) {
+        if (!isValidYear(req.query.year)) {
+            res.status(400).json({ error: yearBudgetErrors.invalidYear });
+            return;
+        }
+        queryOptions.year = req.query.year;
+    }
     queryOptions.userId = req.user._id;
 
     try {

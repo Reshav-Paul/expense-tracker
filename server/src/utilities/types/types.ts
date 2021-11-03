@@ -28,3 +28,19 @@ export type YearBudgetOptionalType = {
 }
 
 export type mYearBudgetType = YearBudgetType & Document;
+
+export type MonthBudgetType = {
+    userId: Types.ObjectId,
+    year: number,
+    month: number,
+    budget: number,
+}
+
+export type MonthBudgetOptionalType = {
+    userId?: Types.ObjectId,
+    year?: number,
+    month?: number,
+    budget?: number,
+}
+
+export type mMonthBudgetType = MonthBudgetType & Document;

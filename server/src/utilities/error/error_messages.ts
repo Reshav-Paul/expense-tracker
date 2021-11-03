@@ -26,3 +26,15 @@ export let yearBudgetErrors = {
     userIdNotPresent: 'User ID is mandatory',
     budgetExists: 'Budget has already been created',
 }
+
+export let monthBudgetErrors = {
+    notFound: 'No Budget Found for this Month',
+    yearNotPresent: 'Year is mandatory',
+    budgetNotPresent: 'Budget is mandatory',
+    monthNotPresent: 'Month is mandatory',
+    invalidYear: 'This year is not valid',
+    invalidBudget: 'This budget is not valid',
+    invalidMonth: 'This month is not valid. Months 1-12 are valid',
+    userIdNotPresent: 'User ID is mandatory',
+    budgetExists: 'Budget has already been created',
+}

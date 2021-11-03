@@ -5,8 +5,8 @@ import { mYearBudgetType } from '../utilities/types/types';
 const Schema = mongoose.Schema;
 
 const YearBudgetSchema = new Schema({
-    userId: Schema.Types.ObjectId,
-    year: { type: Schema.Types.Number, required: true },
+    userId: { type: Schema.Types.ObjectId, required: true },
+    year: { type: Schema.Types.Number, required: true, unique: true },
     budget: { type: Schema.Types.Number, required: true },
 });
 

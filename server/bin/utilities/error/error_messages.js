@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.yearBudgetErrors = exports.generalErrors = exports.userErrors = void 0;
+exports.monthBudgetErrors = exports.yearBudgetErrors = exports.generalErrors = exports.userErrors = void 0;
 exports.userErrors = {
     duplicateEmail: 'Email already signed up',
     noFirstname: 'First Name is required',
@@ -24,6 +24,17 @@ exports.yearBudgetErrors = {
     budgetNotPresent: 'Budget is mandatory',
     invalidYear: 'This year is not valid',
     invalidBudget: 'This budget is not valid',
+    userIdNotPresent: 'User ID is mandatory',
+    budgetExists: 'Budget has already been created',
+};
+exports.monthBudgetErrors = {
+    notFound: 'No Budget Found for this Month',
+    yearNotPresent: 'Year is mandatory',
+    budgetNotPresent: 'Budget is mandatory',
+    monthNotPresent: 'Month is mandatory',
+    invalidYear: 'This year is not valid',
+    invalidBudget: 'This budget is not valid',
+    invalidMonth: 'This month is not valid. Months 1-12 are valid',
     userIdNotPresent: 'User ID is mandatory',
     budgetExists: 'Budget has already been created',
 };

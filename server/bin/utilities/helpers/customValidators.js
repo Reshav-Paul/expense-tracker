@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.budgetValidator = exports.validateYear = exports.validateMongoId = void 0;
+exports.budgetValidator = exports.yearValidator = exports.isValidYear = exports.validateMongoId = void 0;
 const validator_1 = __importDefault(require("validator"));
 const error_messages_1 = require("../error/error_messages");
 let validateMongoId = function validateMongoId(id) {
     return validator_1.default.isMongoId(id);
 };
 exports.validateMongoId = validateMongoId;
-let validateYear = function (input, meta) {
+let isValidYear = function isValidYear(input) {
     let year;
     try {
         if (typeof input === 'number')
@@ -19,6 +19,15 @@ let validateYear = function (input, meta) {
             year = parseInt(input);
         if (year > 1900 && year < 9999)
             return true;
+    }
+    catch (err) { }
+    return false;
+};
+exports.isValidYear = isValidYear;
+let yearValidator = function (input, meta) {
+    try {
+        if ((0, exports.isValidYear)(input))
+            return true;
         else
             throw new Error(error_messages_1.yearBudgetErrors.invalidYear);
     }
@@ -26,7 +35,7 @@ let validateYear = function (input, meta) {
         throw new Error(error_messages_1.yearBudgetErrors.invalidYear);
     }
 };
-exports.validateYear = validateYear;
+exports.yearValidator = yearValidator;
 let budgetValidator = function (input, meta) {
     let budget;
     try {
