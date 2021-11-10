@@ -31,20 +31,20 @@ export let year_budget_create: RequestHandler = async function (req: any, res, n
         return;
     }
 
-    let existingBudget = await YearBudget.findOne({ year: req.body.year });
-    if (existingBudget) {
-        res.json({ message: yearBudgetErrors.budgetExists });
-        return;
-    }
-
-    let newYearBudgetData: YearBudgetType = {
-        year: req.body.year,
-        budget: req.body.budget,
-        userId: req.body.userId,
-    }
-
-    let newYearBudget = new YearBudget(newYearBudgetData);
     try {
+        let existingBudget = await YearBudget.findOne({ year: req.body.year });
+        if (existingBudget) {
+            res.json({ message: yearBudgetErrors.budgetExists });
+            return;
+        }
+
+        let newYearBudgetData: YearBudgetType = {
+            year: req.body.year,
+            budget: req.body.budget,
+            userId: req.body.userId,
+        }
+
+        let newYearBudget = new YearBudget(newYearBudgetData);
         let createdBudget = await newYearBudget.save();
         let { __v, ...returnBudget } = createdBudget.toJSON();
         res.json(returnBudget);
