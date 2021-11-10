@@ -37,4 +37,5 @@ export let monthBudgetErrors = {
     invalidMonth: 'This month is not valid. Months 1-12 are valid',
     userIdNotPresent: 'User ID is mandatory',
     budgetExists: 'Budget has already been created',
+    noYearBudgetExists: 'Month Budget requires a year Budget to be created First',
 }

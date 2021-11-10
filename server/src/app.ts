@@ -23,10 +23,12 @@ app.use(passport.initialize());
 import userRouter from './routes/user';
 import indexRouter from './routes/index';
 import yearBudgetRouter from './routes/yearBudget';
+import monthBudgetRouter from './routes/monthBudget';
 
 app.use('/', indexRouter);
 app.use('/users', userRouter);
 app.use('/budgets/year', yearBudgetRouter);
+app.use('/budgets/month', monthBudgetRouter);
 
 let defaultHandler: express.ErrorRequestHandler = function (err, req, res, next) {
     // set locals, only providing error in development

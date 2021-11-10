@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.user_update = exports.user_get_by_id = exports.user_create = exports.userUpdationValidation = exports.userCreationValidation = void 0;
+exports.user_update = exports.user_get_me = exports.user_get_by_id = exports.user_create = exports.userUpdationValidation = exports.userCreationValidation = void 0;
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
 const error_messages_1 = require("../utilities/error/error_messages");
@@ -95,6 +95,21 @@ let user_get_by_id = function (req, res, next) {
     });
 };
 exports.user_get_by_id = user_get_by_id;
+let user_get_me = function (req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!req.user || !req.user._id) {
+            res.status(401).send('Unauthorized');
+            return;
+        }
+        try {
+            let me = yield User_1.default.findById(req.user._id).lean();
+            res.json(me);
+        }
+        catch (err) {
+        }
+    });
+};
+exports.user_get_me = user_get_me;
 let user_update = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const errors = (0, express_validator_1.validationResult)(req);

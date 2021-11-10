@@ -51,18 +51,18 @@ let year_budget_create = function (req, res, next) {
             });
             return;
         }
-        let existingBudget = yield YearBudget_1.default.findOne({ year: req.body.year });
-        if (existingBudget) {
-            res.json({ message: error_messages_1.yearBudgetErrors.budgetExists });
-            return;
-        }
-        let newYearBudgetData = {
-            year: req.body.year,
-            budget: req.body.budget,
-            userId: req.body.userId,
-        };
-        let newYearBudget = new YearBudget_1.default(newYearBudgetData);
         try {
+            let existingBudget = yield YearBudget_1.default.findOne({ year: req.body.year });
+            if (existingBudget) {
+                res.json({ message: error_messages_1.yearBudgetErrors.budgetExists });
+                return;
+            }
+            let newYearBudgetData = {
+                year: req.body.year,
+                budget: req.body.budget,
+                userId: req.body.userId,
+            };
+            let newYearBudget = new YearBudget_1.default(newYearBudgetData);
             let createdBudget = yield newYearBudget.save();
             let _a = createdBudget.toJSON(), { __v } = _a, returnBudget = __rest(_a, ["__v"]);
             res.json(returnBudget);
