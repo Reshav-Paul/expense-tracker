@@ -70,6 +70,19 @@ export let user_get_by_id: RequestHandler = async function (req, res, next) {
     }
 }
 
+export let user_get_me: RequestHandler = async function (req: any, res, next) {
+    if (!req.user || !req.user._id) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
+    try {
+        let me = await User.findById(req.user._id).lean();
+        res.json(me);
+    } catch (err) {
+
+    }
+}
+
 export let user_update: RequestHandler = async function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
