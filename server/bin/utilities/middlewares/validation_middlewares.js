@@ -23,18 +23,17 @@ let authenticateUserIdInParam = function (req, res, next) {
 };
 exports.authenticateUserIdInParam = authenticateUserIdInParam;
 let authenticateUserIdInBody = function (param, req, res, next) {
-    if (!(0, customValidators_1.validateMongoId)(req.body[param])) {
+    let validationError = [{
+            value: req.body[param],
+            msg: error_messages_1.generalErrors.invalidMongoId,
+            param,
+            location: 'body'
+        }];
+    if (!req.body[param] || !(0, customValidators_1.validateMongoId)(req.body[param])) {
         let errorBody = {
             error: {
                 status: 'Validation_Error',
-                errors: [
-                    {
-                        value: req.body[param],
-                        msg: error_messages_1.generalErrors.invalidMongoId,
-                        param,
-                        location: 'body'
-                    }
-                ]
+                errors: validationError
             }
         };
         res.status(400).json(errorBody);

@@ -30,6 +30,6 @@ let authUserFromBody = function (req, res, next) {
 monthBudgetRouter.post('/', auth_controller.user_auth, ...month_budget_controller.monthBudgetCreationValidation, authUserFromBody, month_budget_controller.month_budget_create);
 monthBudgetRouter.get('/', auth_controller.user_auth, month_budget_controller.month_budget_get_all);
 monthBudgetRouter.get('/:id', auth_controller.user_auth, validation_middlewares_1.validateParamIdAndRespond, month_budget_controller.month_budget_get_by_id);
-monthBudgetRouter.put('/:id', auth_controller.user_auth, validation_middlewares_1.validateParamIdAndRespond, ...month_budget_controller.monthBudgetUpdationValidation, month_budget_controller.month_budget_update_by_id);
+monthBudgetRouter.put('/:id', auth_controller.user_auth, validation_middlewares_1.validateParamIdAndRespond, ...month_budget_controller.monthBudgetUpdationValidation, authUserFromBody, month_budget_controller.month_budget_update_by_id);
 exports.default = monthBudgetRouter;
 //# sourceMappingURL=monthBudget.js.map

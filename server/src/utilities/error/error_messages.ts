@@ -39,3 +39,14 @@ export let monthBudgetErrors = {
     budgetExists: 'Budget has already been created',
     noYearBudgetExists: 'Month Budget requires a year Budget to be created First',
 }
+
+export let expenseErrors = {
+    notFound: 'No Expenses Found',
+    nameNotPresent: 'Name is mandatory',
+    amountNotPresent: 'Amount is mandatory',
+    dateNotPresent: 'Date is mandatory',
+    userIdNotPresent: 'User ID is mandatory',
+    invalidAmount: 'This amount is not valid',
+    invalidDate: 'Invalid Date Format. Please use format YYYY-MM-DD',
+    noMonthBudgetExists: 'Expenses requires a Month Budget to be created First',
+}

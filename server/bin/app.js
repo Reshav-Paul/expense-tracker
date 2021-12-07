@@ -25,10 +25,12 @@ const user_1 = __importDefault(require("./routes/user"));
 const index_1 = __importDefault(require("./routes/index"));
 const yearBudget_1 = __importDefault(require("./routes/yearBudget"));
 const monthBudget_1 = __importDefault(require("./routes/monthBudget"));
+const expense_1 = __importDefault(require("./routes/expense"));
 app.use('/', index_1.default);
 app.use('/users', user_1.default);
 app.use('/budgets/year', yearBudget_1.default);
 app.use('/budgets/month', monthBudget_1.default);
+app.use('/expenses', expense_1.default);
 let defaultHandler = function (err, req, res, next) {
     // set locals, only providing error in development
     if (err.message) {

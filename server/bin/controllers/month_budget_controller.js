@@ -157,8 +157,6 @@ let month_budget_update_by_id = function (req, res, next) {
         }
         try {
             let updateData = {
-                year: req.body.year,
-                month: req.body.month,
                 budget: req.body.budget,
             };
             let newBudget = yield MonthBudget_1.default.findByIdAndUpdate(req.params.id, updateData);

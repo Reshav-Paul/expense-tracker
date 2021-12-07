@@ -44,3 +44,19 @@ export type MonthBudgetOptionalType = {
 }
 
 export type mMonthBudgetType = MonthBudgetType & Document;
+
+export type ExpenseType = {
+    name: string,
+    amount: number,
+    date: string,
+    userId: Types.ObjectId,
+}
+
+export type ExpenseOptionalType = {
+    name?: string,
+    amount?: number,
+    userId?: Types.ObjectId,
+    date?: string,
+}
+
+export type mExpenseType = ExpenseType & Document;

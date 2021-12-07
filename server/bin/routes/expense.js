@@ -22,14 +22,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const validation_middlewares_1 = require("../utilities/middlewares/validation_middlewares");
 const auth_controller = __importStar(require("../controllers/auth_controller"));
-const year_budget_controller = __importStar(require("../controllers/year_budget_controller"));
-let yearBudgetRouter = (0, express_1.Router)();
+const expense_controller = __importStar(require("../controllers/expense_controller"));
+let expenseRouter = (0, express_1.Router)();
 let authUserFromBody = function (req, res, next) {
     return (0, validation_middlewares_1.authenticateUserIdInBody)('userId', req, res, next);
 };
-yearBudgetRouter.post('/', auth_controller.user_auth, ...year_budget_controller.yearBudgetCreationValidation, authUserFromBody, year_budget_controller.year_budget_create);
-yearBudgetRouter.get('/', auth_controller.user_auth, year_budget_controller.year_budget_get_all);
-yearBudgetRouter.get('/:id', auth_controller.user_auth, validation_middlewares_1.validateParamIdAndRespond, year_budget_controller.year_budget_get_by_id);
-yearBudgetRouter.put('/:id', auth_controller.user_auth, validation_middlewares_1.validateParamIdAndRespond, ...year_budget_controller.yearBudgetUpdationValidation, authUserFromBody, year_budget_controller.year_budget_update_by_id);
-exports.default = yearBudgetRouter;
-//# sourceMappingURL=yearBudget.js.map
+expenseRouter.post('/', auth_controller.user_auth, ...expense_controller.expenseCreationValidation, authUserFromBody, expense_controller.expense_create);
+expenseRouter.get('/', auth_controller.user_auth, expense_controller.expense_get_all);
+expenseRouter.get('/:id', auth_controller.user_auth, validation_middlewares_1.validateParamIdAndRespond, expense_controller.expense_get_by_id);
+expenseRouter.put('/:id', auth_controller.user_auth, validation_middlewares_1.validateParamIdAndRespond, ...expense_controller.expenseUpdationValidation, authUserFromBody, expense_controller.expense_update_by_id);
+exports.default = expenseRouter;
+//# sourceMappingURL=expense.js.map

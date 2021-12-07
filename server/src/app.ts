@@ -24,11 +24,13 @@ import userRouter from './routes/user';
 import indexRouter from './routes/index';
 import yearBudgetRouter from './routes/yearBudget';
 import monthBudgetRouter from './routes/monthBudget';
+import expenseRouter from './routes/expense';
 
 app.use('/', indexRouter);
 app.use('/users', userRouter);
 app.use('/budgets/year', yearBudgetRouter);
 app.use('/budgets/month', monthBudgetRouter);
+app.use('/expenses', expenseRouter);
 
 let defaultHandler: express.ErrorRequestHandler = function (err, req, res, next) {
     // set locals, only providing error in development

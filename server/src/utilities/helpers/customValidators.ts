@@ -1,6 +1,6 @@
 import { CustomValidator } from "express-validator";
 import validator from "validator";
-import { yearBudgetErrors, monthBudgetErrors } from "../error/error_messages";
+import { yearBudgetErrors, monthBudgetErrors, expenseErrors } from "../error/error_messages";
 
 export let validateMongoId = function validateMongoId(id: string) {
     return validator.isMongoId(id);
