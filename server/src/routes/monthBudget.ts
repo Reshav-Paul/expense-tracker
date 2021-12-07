@@ -16,7 +16,7 @@ monthBudgetRouter.get('/', auth_controller.user_auth, month_budget_controller.mo
 monthBudgetRouter.get('/:id', auth_controller.user_auth,
     validateParamIdAndRespond, month_budget_controller.month_budget_get_by_id);
 monthBudgetRouter.put('/:id', auth_controller.user_auth, validateParamIdAndRespond,
-    ...month_budget_controller.monthBudgetUpdationValidation,
+    ...month_budget_controller.monthBudgetUpdationValidation, authUserFromBody,
     month_budget_controller.month_budget_update_by_id);
 
 export default monthBudgetRouter;

@@ -5,6 +5,7 @@ import { budgetValidator, yearValidator, isValidYear } from "../utilities/helper
 import { YearBudgetOptionalType, YearBudgetType } from "../utilities/types/types";
 import YearBudget from "../models/YearBudget";
 import { generalErrors, yearBudgetErrors } from '../utilities/error/error_messages';
+import { createValidationError, createNotFoundError, createUnauthorizedError, createEntityExistsError, createQueryValidationError } from '../utilities/error/error_response';
 
 export let yearBudgetCreationValidation = [
     body('year', yearBudgetErrors.yearNotPresent).exists().notEmpty().trim(),
@@ -25,16 +26,14 @@ export let yearBudgetUpdationValidation = [
 export let year_budget_create: RequestHandler = async function (req: any, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.json({
-            error: { status: 'Validation_Error', errors: errors.array() }
-        });
+        res.status(400).json(createValidationError(errors.array()));
         return;
     }
 
     try {
         let existingBudget = await YearBudget.findOne({ year: req.body.year });
         if (existingBudget) {
-            res.json({ message: yearBudgetErrors.budgetExists });
+            res.status(400).json(createEntityExistsError(yearBudgetErrors.budgetExists));
             return;
         }
 
@@ -57,10 +56,10 @@ export let year_budget_get_by_id: RequestHandler = async function (req: any, res
     try {
         let yearBudget = await YearBudget.findById(req.params.id).lean();
         if (!yearBudget) {
-            res.status(404).json({ error: yearBudgetErrors.notFound });
+            res.status(404).json(createNotFoundError(yearBudgetErrors.notFound));
         } else {
             if (yearBudget.userId.toString() !== req.user._id.toString()) {
-                res.status(401).send('Unauthorized');
+                res.status(401).send(createUnauthorizedError());
                 return;
             }
             res.status(200).json(yearBudget);
@@ -74,7 +73,7 @@ export let year_budget_get_all: RequestHandler = async function (req: any, res, 
     let queryOptions: YearBudgetOptionalType = {};
     if (req.query.year) {
         if (!isValidYear(req.query.year)) {
-            res.status(400).json({ error: yearBudgetErrors.invalidYear });
+            res.status(400).json(createQueryValidationError(yearBudgetErrors.invalidYear));
             return;
         }
         queryOptions.year = req.query.year;
@@ -93,10 +92,10 @@ export let year_budget_update_by_id: RequestHandler = async function (req: any, 
     try {
         let yearBudget = await YearBudget.findById(req.params.id).lean();
         if (!yearBudget) {
-            res.status(404).json({ error: yearBudgetErrors.notFound });
+            res.status(404).json(createNotFoundError(yearBudgetErrors.notFound));
         } else {
             if (yearBudget.userId.toString() !== req.user._id.toString()) {
-                res.status(401).send('Unauthorized');
+                res.status(401).send(createUnauthorizedError());
                 return;
             }
         }
@@ -106,9 +105,7 @@ export let year_budget_update_by_id: RequestHandler = async function (req: any, 
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(400).json({
-            error: { status: 'Validation_Error', errors: errors.array() }
-        });
+        res.status(400).json(createValidationError(errors.array()));
         return;
     }
 

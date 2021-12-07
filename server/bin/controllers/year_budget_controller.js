@@ -28,6 +28,7 @@ const express_validator_1 = require("express-validator");
 const customValidators_1 = require("../utilities/helpers/customValidators");
 const YearBudget_1 = __importDefault(require("../models/YearBudget"));
 const error_messages_1 = require("../utilities/error/error_messages");
+const error_response_1 = require("../utilities/error/error_response");
 exports.yearBudgetCreationValidation = [
     (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.yearNotPresent).exists().notEmpty().trim(),
     (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(customValidators_1.yearValidator),
@@ -46,15 +47,13 @@ let year_budget_create = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.json({
-                error: { status: 'Validation_Error', errors: errors.array() }
-            });
+            res.status(400).json((0, error_response_1.createValidationError)(errors.array()));
             return;
         }
         try {
             let existingBudget = yield YearBudget_1.default.findOne({ year: req.body.year });
             if (existingBudget) {
-                res.json({ message: error_messages_1.yearBudgetErrors.budgetExists });
+                res.status(400).json((0, error_response_1.createEntityExistsError)(error_messages_1.yearBudgetErrors.budgetExists));
                 return;
             }
             let newYearBudgetData = {
@@ -78,11 +77,11 @@ let year_budget_get_by_id = function (req, res, next) {
         try {
             let yearBudget = yield YearBudget_1.default.findById(req.params.id).lean();
             if (!yearBudget) {
-                res.status(404).json({ error: error_messages_1.yearBudgetErrors.notFound });
+                res.status(404).json((0, error_response_1.createNotFoundError)(error_messages_1.yearBudgetErrors.notFound));
             }
             else {
                 if (yearBudget.userId.toString() !== req.user._id.toString()) {
-                    res.status(401).send('Unauthorized');
+                    res.status(401).send((0, error_response_1.createUnauthorizedError)());
                     return;
                 }
                 res.status(200).json(yearBudget);
@@ -99,7 +98,7 @@ let year_budget_get_all = function (req, res, next) {
         let queryOptions = {};
         if (req.query.year) {
             if (!(0, customValidators_1.isValidYear)(req.query.year)) {
-                res.status(400).json({ error: error_messages_1.yearBudgetErrors.invalidYear });
+                res.status(400).json((0, error_response_1.createQueryValidationError)(error_messages_1.yearBudgetErrors.invalidYear));
                 return;
             }
             queryOptions.year = req.query.year;
@@ -120,11 +119,11 @@ let year_budget_update_by_id = function (req, res, next) {
         try {
             let yearBudget = yield YearBudget_1.default.findById(req.params.id).lean();
             if (!yearBudget) {
-                res.status(404).json({ error: error_messages_1.yearBudgetErrors.notFound });
+                res.status(404).json((0, error_response_1.createNotFoundError)(error_messages_1.yearBudgetErrors.notFound));
             }
             else {
                 if (yearBudget.userId.toString() !== req.user._id.toString()) {
-                    res.status(401).send('Unauthorized');
+                    res.status(401).send((0, error_response_1.createUnauthorizedError)());
                     return;
                 }
             }
@@ -134,9 +133,7 @@ let year_budget_update_by_id = function (req, res, next) {
         }
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.status(400).json({
-                error: { status: 'Validation_Error', errors: errors.array() }
-            });
+            res.status(400).json((0, error_response_1.createValidationError)(errors.array()));
             return;
         }
         try {

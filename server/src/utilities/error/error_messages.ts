@@ -28,7 +28,7 @@ export let yearBudgetErrors = {
 }
 
 export let monthBudgetErrors = {
-    notFound: 'No Budget Found for this Month',
+    notFound: 'No Budget Found',
     yearNotPresent: 'Year is mandatory',
     budgetNotPresent: 'Budget is mandatory',
     monthNotPresent: 'Month is mandatory',

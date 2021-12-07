@@ -6,6 +6,7 @@ import { MonthBudgetOptionalType, MonthBudgetType } from "../utilities/types/typ
 import MonthBudget from "../models/MonthBudget";
 import { generalErrors, monthBudgetErrors } from '../utilities/error/error_messages';
 import YearBudget from "../models/YearBudget";
+import { createValidationError, createNotFoundError, createUnauthorizedError, createEntityExistsError, createQueryValidationError } from '../utilities/error/error_response';
 
 export let monthBudgetCreationValidation = [
     body('year', monthBudgetErrors.yearNotPresent).exists().bail().notEmpty().trim(),
@@ -26,16 +27,14 @@ export let monthBudgetUpdationValidation = [
 export let month_budget_create: RequestHandler = async function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.json({
-            error: { status: 'Validation_Error', errors: errors.array() }
-        });
+        res.status(400).json(createValidationError(errors.array()));
         return;
     }
 
     try {
         let yearBudget = await YearBudget.findOne({ year: req.body.year }).lean();
         if (!yearBudget) {
-            res.json({ message: monthBudgetErrors.noYearBudgetExists });
+            res.status(400).json(createNotFoundError(monthBudgetErrors.noYearBudgetExists))
             return;
         }
 
@@ -44,7 +43,7 @@ export let month_budget_create: RequestHandler = async function (req, res, next)
             month: req.body.month,
         });
         if (existingBudget) {
-            res.json({ message: monthBudgetErrors.budgetExists });
+            res.status(400).json(createEntityExistsError(monthBudgetErrors.budgetExists));
             return;
         }
 
@@ -68,11 +67,11 @@ export let month_budget_get_by_id: RequestHandler = async function (req: any, re
     try {
         let monthBudget = await MonthBudget.findById(req.params.id).lean();
         if (!monthBudget) {
-            res.status(404).json({ error: monthBudgetErrors.budgetNotPresent });
+            res.status(404).json(createNotFoundError(monthBudgetErrors.notFound));
             return;
         }
         if (monthBudget.userId.toString() !== req.user._id.toString()) {
-            res.status(401).send('Unauthorized');
+            res.status(401).send(createUnauthorizedError());
             return;
         }
         res.json(monthBudget);
@@ -86,14 +85,14 @@ export let month_budget_get_all: RequestHandler = async function (req: any, res,
         let query: MonthBudgetOptionalType = {};
         if (req.query.year) {
             if (!isValidYear(req.query.year)) {
-                res.status(400).json({ error: monthBudgetErrors.invalidYear });
+                res.status(400).json(createQueryValidationError(monthBudgetErrors.invalidYear));
                 return;
             }
             query.year = req.query.year;
         }
         if (req.query.month) {
             if (!isValidMonth(req.query.month)) {
-                res.status(400).json({ error: monthBudgetErrors.invalidMonth });
+                res.status(400).json(createQueryValidationError(monthBudgetErrors.invalidMonth));
                 return;
             }
             query.month = req.query.month;
@@ -111,10 +110,11 @@ export let month_budget_update_by_id: RequestHandler = async function (req: any,
     try {
         let monthBudget = await MonthBudget.findById(req.params.id).lean();
         if (!monthBudget) {
-            res.status(404).json({ error: monthBudgetErrors.notFound });
+            res.status(404).json(createNotFoundError(monthBudgetErrors.notFound));
+            return;
         } else {
             if (monthBudget.userId.toString() !== req.user._id.toString()) {
-                res.status(401).send('Unauthorized');
+                res.status(401).send(createUnauthorizedError());
                 return;
             }
         }
@@ -124,16 +124,12 @@ export let month_budget_update_by_id: RequestHandler = async function (req: any,
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(400).json({
-            error: { status: 'Validation_Error', errors: errors.array() }
-        });
+        res.json(createValidationError(errors.array()));
         return;
     }
 
     try {
         let updateData: MonthBudgetOptionalType = {
-            year: req.body.year,
-            month: req.body.month,
             budget: req.body.budget,
         };
 

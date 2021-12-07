@@ -27,6 +27,7 @@ exports.user_update = exports.user_get_me = exports.user_get_by_id = exports.use
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
 const error_messages_1 = require("../utilities/error/error_messages");
+const error_response_1 = require("../utilities/error/error_response");
 exports.userCreationValidation = [
     (0, express_validator_1.body)('firstname', error_messages_1.userErrors.noFirstname).exists().bail().trim().notEmpty(),
     (0, express_validator_1.body)('firstname', error_messages_1.userErrors.invalidFirstname).optional({ checkFalsy: true }).isAlpha(),
@@ -45,9 +46,7 @@ let user_create = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.json({
-                error: { status: 'Validation_Error', errors: errors.array() }
-            });
+            res.status(400).json((0, error_response_1.createValidationError)(errors.array()));
             return;
         }
         let newUserData = {
@@ -66,14 +65,11 @@ let user_create = function (req, res, next) {
         catch (e) {
             if (e.code === 11000) {
                 if (e.keyPattern.email === 1) {
-                    res.status(400).json({
-                        message: error_messages_1.userErrors.duplicateEmail,
-                        value: e.keyValue.email,
-                    });
+                    res.status(400).json((0, error_response_1.createValidationError)([(0, error_response_1.formatToValidationErrorInBody)(e.keyValue.email, error_messages_1.userErrors.duplicateEmail, 'email')]));
                 }
             }
             else {
-                res.status(400).json(e);
+                res.status(400).json((0, error_response_1.createDbError)(e));
             }
         }
     });
@@ -84,13 +80,13 @@ let user_get_by_id = function (req, res, next) {
         try {
             let user = yield User_1.default.findById(req.params.id).lean();
             if (!user) {
-                res.status(404).json({ error: error_messages_1.userErrors.noUserFound });
+                res.status(404).json((0, error_response_1.createNotFoundError)(error_messages_1.userErrors.noUserFound));
                 return;
             }
             res.status(200).json(user);
         }
         catch (e) {
-            res.status(404).json(e);
+            return next(e);
         }
     });
 };
@@ -98,14 +94,19 @@ exports.user_get_by_id = user_get_by_id;
 let user_get_me = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!req.user || !req.user._id) {
-            res.status(401).send('Unauthorized');
+            res.status(401).send((0, error_response_1.createUnauthorizedError)());
             return;
         }
         try {
             let me = yield User_1.default.findById(req.user._id).lean();
+            if (!me) {
+                res.status(404).json((0, error_response_1.createNotFoundError)(error_messages_1.userErrors.noUserFound));
+                return;
+            }
             res.json(me);
         }
         catch (err) {
+            return next(err);
         }
     });
 };
@@ -114,9 +115,7 @@ let user_update = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.json({
-                error: { status: 'Validation_Error', errors: errors.array() }
-            });
+            res.status(400).json((0, error_response_1.createValidationError)(errors.array()));
             return;
         }
         const userData = {};
@@ -124,12 +123,12 @@ let user_update = function (req, res, next) {
             userData.firstname = req.body.firstname;
         if (req.body.lastname)
             userData.lastname = req.body.lastname;
-        let currentUser = yield User_1.default.findById(req.params.id).lean();
-        if (!currentUser) {
-            res.status(400).json({ error: error_messages_1.userErrors.noUserFound });
-            return;
-        }
         try {
+            let currentUser = yield User_1.default.findById(req.params.id).lean();
+            if (!currentUser) {
+                res.status(404).json((0, error_response_1.createNotFoundError)(error_messages_1.userErrors.noUserFound));
+                return;
+            }
             if (Object.keys(userData).length === 0) {
                 res.status(200).json(currentUser);
             }
@@ -139,7 +138,7 @@ let user_update = function (req, res, next) {
             }
         }
         catch (e) {
-            res.status(400).json(e);
+            return next(e);
         }
     });
 };

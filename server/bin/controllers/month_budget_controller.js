@@ -29,6 +29,7 @@ const customValidators_1 = require("../utilities/helpers/customValidators");
 const MonthBudget_1 = __importDefault(require("../models/MonthBudget"));
 const error_messages_1 = require("../utilities/error/error_messages");
 const YearBudget_1 = __importDefault(require("../models/YearBudget"));
+const error_response_1 = require("../utilities/error/error_response");
 exports.monthBudgetCreationValidation = [
     (0, express_validator_1.body)('year', error_messages_1.monthBudgetErrors.yearNotPresent).exists().bail().notEmpty().trim(),
     (0, express_validator_1.body)('year', error_messages_1.monthBudgetErrors.invalidYear).optional().custom(customValidators_1.yearValidator),
@@ -47,15 +48,13 @@ let month_budget_create = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.json({
-                error: { status: 'Validation_Error', errors: errors.array() }
-            });
+            res.status(400).json((0, error_response_1.createValidationError)(errors.array()));
             return;
         }
         try {
             let yearBudget = yield YearBudget_1.default.findOne({ year: req.body.year }).lean();
             if (!yearBudget) {
-                res.json({ message: error_messages_1.monthBudgetErrors.noYearBudgetExists });
+                res.status(400).json((0, error_response_1.createNotFoundError)(error_messages_1.monthBudgetErrors.noYearBudgetExists));
                 return;
             }
             let existingBudget = yield MonthBudget_1.default.findOne({
@@ -63,7 +62,7 @@ let month_budget_create = function (req, res, next) {
                 month: req.body.month,
             });
             if (existingBudget) {
-                res.json({ message: error_messages_1.monthBudgetErrors.budgetExists });
+                res.status(400).json((0, error_response_1.createEntityExistsError)(error_messages_1.monthBudgetErrors.budgetExists));
                 return;
             }
             let newMonthBudgetData = {
@@ -88,11 +87,11 @@ let month_budget_get_by_id = function (req, res, next) {
         try {
             let monthBudget = yield MonthBudget_1.default.findById(req.params.id).lean();
             if (!monthBudget) {
-                res.status(404).json({ error: error_messages_1.monthBudgetErrors.budgetNotPresent });
+                res.status(404).json((0, error_response_1.createNotFoundError)(error_messages_1.monthBudgetErrors.notFound));
                 return;
             }
             if (monthBudget.userId.toString() !== req.user._id.toString()) {
-                res.status(401).send('Unauthorized');
+                res.status(401).send((0, error_response_1.createUnauthorizedError)());
                 return;
             }
             res.json(monthBudget);
@@ -109,14 +108,14 @@ let month_budget_get_all = function (req, res, next) {
             let query = {};
             if (req.query.year) {
                 if (!(0, customValidators_1.isValidYear)(req.query.year)) {
-                    res.status(400).json({ error: error_messages_1.monthBudgetErrors.invalidYear });
+                    res.status(400).json((0, error_response_1.createQueryValidationError)(error_messages_1.monthBudgetErrors.invalidYear));
                     return;
                 }
                 query.year = req.query.year;
             }
             if (req.query.month) {
                 if (!(0, customValidators_1.isValidMonth)(req.query.month)) {
-                    res.status(400).json({ error: error_messages_1.monthBudgetErrors.invalidMonth });
+                    res.status(400).json((0, error_response_1.createQueryValidationError)(error_messages_1.monthBudgetErrors.invalidMonth));
                     return;
                 }
                 query.month = req.query.month;
@@ -136,11 +135,12 @@ let month_budget_update_by_id = function (req, res, next) {
         try {
             let monthBudget = yield MonthBudget_1.default.findById(req.params.id).lean();
             if (!monthBudget) {
-                res.status(404).json({ error: error_messages_1.monthBudgetErrors.notFound });
+                res.status(404).json((0, error_response_1.createNotFoundError)(error_messages_1.monthBudgetErrors.notFound));
+                return;
             }
             else {
                 if (monthBudget.userId.toString() !== req.user._id.toString()) {
-                    res.status(401).send('Unauthorized');
+                    res.status(401).send((0, error_response_1.createUnauthorizedError)());
                     return;
                 }
             }
@@ -150,9 +150,7 @@ let month_budget_update_by_id = function (req, res, next) {
         }
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.status(400).json({
-                error: { status: 'Validation_Error', errors: errors.array() }
-            });
+            res.json((0, error_response_1.createValidationError)(errors.array()));
             return;
         }
         try {

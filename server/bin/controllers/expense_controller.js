@@ -29,6 +29,7 @@ const Expense_1 = __importDefault(require("../models/Expense"));
 const MonthBudget_1 = __importDefault(require("../models/MonthBudget"));
 const customValidators_1 = require("../utilities/helpers/customValidators");
 const error_messages_1 = require("../utilities/error/error_messages");
+const error_response_1 = require("../utilities/error/error_response");
 exports.expenseCreationValidation = [
     (0, express_validator_1.body)('name', error_messages_1.expenseErrors.nameNotPresent).exists().bail().notEmpty().trim(),
     (0, express_validator_1.body)('date', error_messages_1.expenseErrors.dateNotPresent).exists().bail().notEmpty().trim(),
@@ -49,9 +50,7 @@ let expense_create = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.json({
-                error: { status: 'Validation_Error', errors: errors.array() }
-            });
+            res.status(400).json((0, error_response_1.createValidationError)(errors.array()));
             return;
         }
         let expenseDate = new Date(req.body.date);
@@ -60,7 +59,7 @@ let expense_create = function (req, res, next) {
         try {
             let monthBudget = yield MonthBudget_1.default.findOne({ month: month, year: year }).lean();
             if (!monthBudget || monthBudget.budget <= 0) {
-                res.json({ message: error_messages_1.expenseErrors.noMonthBudgetExists });
+                res.status(400).json((0, error_response_1.createNotFoundError)(error_messages_1.expenseErrors.noMonthBudgetExists));
                 return;
             }
             let expenseData = {
@@ -85,11 +84,11 @@ let expense_get_by_id = function (req, res, next) {
         try {
             let expense = yield Expense_1.default.findById(req.params.id);
             if (!expense) {
-                res.status(404).json({ error: error_messages_1.expenseErrors.notFound });
+                res.status(404).json((0, error_response_1.createNotFoundError)(error_messages_1.expenseErrors.notFound));
                 return;
             }
             else if (expense.userId.toString() !== req.user._id.toString()) {
-                res.status(401).send('Unauthorized');
+                res.status(401).send((0, error_response_1.createUnauthorizedError)());
                 return;
             }
             res.json(expense);
@@ -123,11 +122,12 @@ let expense_update_by_id = function (req, res, next) {
         try {
             let existingExpense = yield Expense_1.default.findById(req.params.id).lean();
             if (!existingExpense) {
-                res.status(404).json({ error: error_messages_1.expenseErrors.notFound });
+                res.status(404).json((0, error_response_1.createNotFoundError)(error_messages_1.expenseErrors.notFound));
+                return;
             }
             else {
                 if (existingExpense.userId.toString() !== req.user._id.toString()) {
-                    res.status(401).send('Unauthorized');
+                    res.status(401).send((0, error_response_1.createUnauthorizedError)());
                     return;
                 }
             }
@@ -137,9 +137,7 @@ let expense_update_by_id = function (req, res, next) {
         }
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.json({
-                error: { status: 'Validation_Error', errors: errors.array() }
-            });
+            res.status(400).json((0, error_response_1.createValidationError)(errors.array()));
             return;
         }
         let expenseUpdateData = {};
@@ -152,7 +150,7 @@ let expense_update_by_id = function (req, res, next) {
                 expenseUpdateData.date = req.body.date;
                 let monthBudget = yield MonthBudget_1.default.findOne({ month: month, year: year }).lean();
                 if (!monthBudget || monthBudget.budget <= 0) {
-                    res.json({ message: error_messages_1.expenseErrors.noMonthBudgetExists });
+                    res.status(400).json((0, error_response_1.createNotFoundError)(error_messages_1.expenseErrors.noMonthBudgetExists));
                     return;
                 }
             }

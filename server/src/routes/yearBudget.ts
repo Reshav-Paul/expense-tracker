@@ -16,7 +16,7 @@ yearBudgetRouter.get('/', auth_controller.user_auth, year_budget_controller.year
 yearBudgetRouter.get('/:id', auth_controller.user_auth,
     validateParamIdAndRespond, year_budget_controller.year_budget_get_by_id);
 yearBudgetRouter.put('/:id', auth_controller.user_auth, validateParamIdAndRespond,
-    ...year_budget_controller.yearBudgetUpdationValidation,
+    ...year_budget_controller.yearBudgetUpdationValidation, authUserFromBody,
     year_budget_controller.year_budget_update_by_id);
 
 export default yearBudgetRouter;
