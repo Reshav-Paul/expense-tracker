@@ -17,7 +17,7 @@ let ThemePopup: React.FC<{ themes: ifTheme }> = function ThemePopup(props) {
   for (let t in props.themes) {
     themes.push(props.themes[t]);
   }
-  return <div id="theme-btn" className="has-dropdown col-2 text-right">
+  return <div id="theme-btn" className="has-dropdown text-right">
     <button className="bg-pr">
       <FontAwesomeIcon icon={faPalette} className="icon lg"></FontAwesomeIcon>
     </button>

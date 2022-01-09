@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { expenseType, monthlyBudgetType } from "./app/constants/Types";
-import MonthBudgetForm from "./components/MonthBudgetForm";
-import ExpenseForm from "./components/ExpenseForm";
-import ExpenseItem from "./components/ExpenseItem";
-import { updateMonthBudget } from "./app/reducers/monthlyBudgetReducer";
-import { addUserExpense, deleteUserExpense, getExpenseByMonthYear, updateUserExpense } from "./app/reducers/expenseReducer";
-import { getExpenses } from "./app/store";
-import ConfirmPopup from "./components/ConfirmPopup";
+import { expenseType, monthlyBudgetType } from "../app/constants/Types";
+import MonthBudgetForm from "../components/MonthBudgetForm";
+import ExpenseForm from "../components/ExpenseForm";
+import ExpenseItem from "../components/ExpenseItem";
+import { updateMonthBudget } from "../app/reducers/monthlyBudgetReducer";
+import { addUserExpense, deleteUserExpense, getExpenseByMonthYear, updateUserExpense } from "../app/reducers/expenseReducer";
+import { getExpenses } from "../app/store";
+import ConfirmPopup from "../components/ConfirmPopup";
 
 type propType = {
   budget: monthlyBudgetType,

@@ -1,3 +1,13 @@
+import { AnyAction } from "redux";
+import { ThunkAction } from "redux-thunk";
+
+export enum apiActionTypes {
+  clear,
+  request,
+  success,
+  failure,
+};
+
 type themeType = {
   key: string,
   label: string,
@@ -19,11 +29,24 @@ type yearlyBudgetType = {
 }
 
 type profileType = {
+  userId: string,
   firstName: string,
   lastName?: string,
   username: string,
   email: string,
   currentTheme: themeType,
+  authToken: string,
+  updatingStatus: apiActionTypes,
+}
+type optionalProfileType = {
+  userId?: string,
+  firstName?: string,
+  lastName?: string,
+  username?: string,
+  email?: string,
+  currentTheme?: themeType,
+  authToken?: string,
+  updatingStatus?: apiActionTypes,
 }
 type expenseType = {
   id: string,
@@ -48,7 +71,7 @@ type stateType = {
 export type {
   themeType, yearlyBudgetType, monthlyBudgetType,
   expenseType, expenseCollection,
-  profileType, stateType
+  profileType, stateType, optionalProfileType
 };
 
 export type actionType = {
@@ -65,3 +88,11 @@ export type chartColorScheme = {
   accent6: string,
   accent7: string
 }
+
+export type userApiResponseType = {
+  code: number,
+  data?: optionalProfileType,
+  error?: string[],
+}
+
+export type rootThunkAction = ThunkAction<void, stateType, unknown, AnyAction>;

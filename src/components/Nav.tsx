@@ -10,6 +10,8 @@ let SideBar: React.FC<{}> = function (props) {
     document.getElementById('App-Sidebar')?.classList.toggle('collapsed');
   }
 
+  if (location.pathname === '/login') return null;
+
   return <div id="App-Sidebar">
     <h5>
       <FontAwesomeIcon icon={faBars}
@@ -17,7 +19,7 @@ let SideBar: React.FC<{}> = function (props) {
         className="icon lg mr-2"></FontAwesomeIcon>
       <span className="sidebar-label font-sec" style={{ paddingLeft: '0.4rem' }}>ExSpender</span>
     </h5>
-    <Link to='/' className={'sidebar-item ' + (location.pathname === '/' ? 'selected' : '')}>
+    <Link to='/' className={'sidebar-item ' + (location.pathname === '/home' ? 'selected' : '')}>
       <FontAwesomeIcon icon={faHome} className="icon lg mr-2"></FontAwesomeIcon>
       <span className="sidebar-label">Home</span>
     </Link>

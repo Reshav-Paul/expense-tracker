@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import MonthBudgetForm from './components/MonthBudgetForm';
-import { monthMap, monthArray } from './app/constants/utilityData';
+import MonthBudgetForm from '../components/MonthBudgetForm';
+import { monthMap, monthArray } from '../app/constants/utilityData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import MonthMain from './MonthMain';
-import { monthlyBudgetType } from './app/constants/Types';
-import { addMonthBudget, getBudgetByMonthYear, getYearsFromMonthBudget } from './app/reducers/monthlyBudgetReducer';
-import { getMonthBudgets, getYearBudgets } from './app/store';
-import Titlebar from './components/Titlebar';
+import { monthlyBudgetType } from '../app/constants/Types';
+import { addMonthBudget, getBudgetByMonthYear, getYearsFromMonthBudget } from '../app/reducers/monthlyBudgetReducer';
+import { getLoginStatus, getMonthBudgets, getYearBudgets } from '../app/store';
+import Titlebar from '../components/Titlebar';
+import { Redirect } from 'react-router';
 
 let Month: React.FC<{}> = function (props) {
+
   const dispatch = useDispatch();
   const state = useSelector(getMonthBudgets);
   let yearBudgets = useSelector(getYearBudgets);
@@ -31,8 +33,14 @@ let Month: React.FC<{}> = function (props) {
     dispatch(addMonthBudget(payload));
   }
 
+  const isLoggedIn = useSelector(getLoginStatus);
+  if (!isLoggedIn) {
+    return <Redirect to={'/login'} />;
+  }
+
   let monthlyBudget = getBudgetByMonthYear(state, month, year);
   let yearsInData = getYearsFromMonthBudget(state);
+
 
   return <div className="container-fluid h-100">
     <Titlebar title={'Month'} />

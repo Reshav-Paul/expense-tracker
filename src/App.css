@@ -7,9 +7,6 @@
     --dark-transparent: #00000061;
     scrollbar-width: thin;
 }
-/* .hc-text {
-    color: var(--font-sec-color);
-} */
 .fc-pr {
     color: var(--font-pr-color);
 }
@@ -131,9 +128,6 @@
     border-radius: 1rem;
     font-size: 0.9rem;
 }
-#theme-btn {
-    margin-left: auto;
-}
 .has-dropdown {
     position: relative;
 }
@@ -167,13 +161,13 @@
     margin-left: 0;
     list-style: none;
 }
-#home {
-    margin-top: 1.5rem;
-}
 #home .recent-exp .items {
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: var(--sec-color) var(--dark-transparent);
+}
+#login-form {
+    max-width: 400px;
 }
 @media (max-width: 640px) {
     #App-Sidebar {

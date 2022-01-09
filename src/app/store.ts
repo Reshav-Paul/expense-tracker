@@ -1,5 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux'
+import thunk from 'redux-thunk';
+
 import { stateType } from './constants/Types';
 import expenseReducer from './reducers/expenseReducer';
 import monthBudgetReducer from './reducers/monthlyBudgetReducer';
@@ -13,10 +15,13 @@ export const store = configureStore({
     monthBudgets: monthBudgetReducer,
     expenses: expenseReducer,
   }),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });
 
 // selectors
 export const getProfile = (state: stateType) => state.profile;
+export const getLoginStatus = (state: stateType) => state.profile.userId ? true : false;
+export const getUserUpdateStatus = (state: stateType) => state.profile.updatingStatus;
 export const getTheme = (state: stateType) => state.profile.currentTheme;
 export const getYearBudgets = (state: stateType) => state.yearBudgets;
 export const getMonthBudgets = (state: stateType) => state.monthBudgets;

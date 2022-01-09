@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { yearlyBudgetType } from './app/constants/Types';
-import { addYearBudget, updateYearBudget } from './app/reducers/yearBudgetReducer';
-import { getYearBudgets } from './app/store';
-import AnnualBudgetForm from './components/AnnualBudgetForm';
-import Titlebar from './components/Titlebar';
+import { yearlyBudgetType } from '../app/constants/Types';
+import { addYearBudget, updateYearBudget } from '../app/reducers/yearBudgetReducer';
+import { getLoginStatus, getYearBudgets } from '../app/store';
+import AnnualBudgetForm from '../components/AnnualBudgetForm';
+import Titlebar from '../components/Titlebar';
 import { faChevronLeft, faChevronRight, faPen } from '@fortawesome/free-solid-svg-icons';
+import { Redirect } from 'react-router';
 
 let Year: React.FC<{}> = function (props) {
+
   let yearBudgets = useSelector(getYearBudgets);
   let [currentYearIndex, changeCurrentYearIndex] = useState(yearBudgets.length > 0 ? 0 : -1);
   let [addForm, toggleAddForm] = useState(false);
@@ -52,6 +54,11 @@ let Year: React.FC<{}> = function (props) {
   }
   function decrementCurrentYear() {
     changeCurrentYearIndex(currentYearIndex === 0 ? yearBudgets.length - 1 : currentYearIndex - 1);
+  }
+
+  const isLoggedIn = useSelector(getLoginStatus);
+  if (!isLoggedIn) {
+    return <Redirect to={'/login'} />;
   }
 
   if (currentYearIndex < 0) {
