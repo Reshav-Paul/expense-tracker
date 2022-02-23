@@ -30,18 +30,26 @@ type yearlyBudgetType = {
 
 type profileType = {
   userId: string,
-  firstName: string,
-  lastName?: string,
+  firstname: string,
+  lastname?: string,
   username: string,
   email: string,
   currentTheme: themeType,
   authToken: string,
   updatingStatus: apiActionTypes,
 }
+type profilePayloadType = {
+  userId?: string,
+  firstname?: string,
+  lastname?: string,
+  username?: string,
+  email?: string,
+  password?: string,
+}
 type optionalProfileType = {
   userId?: string,
-  firstName?: string,
-  lastName?: string,
+  firstname?: string,
+  lastname?: string,
   username?: string,
   email?: string,
   currentTheme?: themeType,
@@ -71,7 +79,8 @@ type stateType = {
 export type {
   themeType, yearlyBudgetType, monthlyBudgetType,
   expenseType, expenseCollection,
-  profileType, stateType, optionalProfileType
+  profileType, stateType, optionalProfileType,
+  profilePayloadType
 };
 
 export type actionType = {

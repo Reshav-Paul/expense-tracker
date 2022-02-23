@@ -4,8 +4,8 @@ import { createReducer, updateObject } from './stateHandlerUtilities';
 
 export const userInitialState: profileType = {
   userId: '',
-  firstName: '',
-  lastName: '',
+  firstname: '',
+  lastname: '',
   username: '',
   email: '',
   currentTheme: THEMES.DARK_NIGHTS,
