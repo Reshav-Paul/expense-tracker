@@ -11,6 +11,7 @@ let SideBar: React.FC<{}> = function (props) {
   }
 
   if (location.pathname === '/login') return null;
+  if (location.pathname === '/register') return null;
 
   return <div id="App-Sidebar">
     <h5>
