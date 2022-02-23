@@ -6,7 +6,8 @@ import { setUserUpdateFailure, setUserUpdateStart, setUserUpdateSuccess, updateU
 import { getLoginStatus, getUserUpdateStatus } from '../app/store';
 import { Redirect } from 'react-router';
 import userApiHelper from '../apiHelpers/userApiHelper';
-import { Loading } from '../components/Loading';
+import Loading from '../components/Loading';
+import { Link } from 'react-router-dom';
 
 let Login: React.FC<{}> = function (props) {
     const dispatch = useDispatch();
@@ -16,13 +17,19 @@ let Login: React.FC<{}> = function (props) {
         dispatch(setUserUpdateStart());
         try {
             let res = await userApiHelper.performLogin(email, password);
-            if (res?.error && res.error.length > 0) return;
+            if (res?.error && res.error.length > 0) {
+                dispatch(setUserUpdateFailure());
+                return;
+            }
             let userData = res?.data;
             if (userData && userData.authToken && userData.userId) {
                 window.localStorage.setItem('exspender_user_token', userData.authToken);
                 dispatch(updateUser(userData));
-                dispatch(setUserUpdateSuccess());
+            } else {
+                dispatch(setUserUpdateFailure());
+                return;
             }
+            dispatch(setUserUpdateSuccess());
         } catch (error) {
             dispatch(setUserUpdateFailure());
         }
@@ -71,6 +78,7 @@ let Login: React.FC<{}> = function (props) {
                 <input type="text" name="email" placeholder="Email" required />
                 <input type="password" name="password" id="user-password" placeholder="Password" required />
                 <div className="text-center"><button className="btn">Login</button></div>
+                <p className="text-center mt-3">New to ExSpender? <Link to='register'>Create New Account</Link></p>
             </form>
         </div>
     </div>;

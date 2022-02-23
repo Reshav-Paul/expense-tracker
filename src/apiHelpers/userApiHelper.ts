@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { optionalProfileType, userApiResponseType } from '../app/constants/Types';
+import { optionalProfileType, profilePayloadType, userApiResponseType } from '../app/constants/Types';
 import { apiUrl } from '../app/constants/utilityData';
 
 async function performLogin(email: string, password: string) {
@@ -49,8 +49,8 @@ async function fetchMe(token: string) {
             let returnPayload: optionalProfileType = {
                 userId: _id,
                 email,
-                firstName: firstname,
-                lastName: lastname,
+                firstname: firstname,
+                lastname: lastname,
                 username
             };
             let apiResponse: userApiResponseType = {
@@ -76,7 +76,37 @@ async function fetchMe(token: string) {
     }
 }
 
+async function performRegister(payload: profilePayloadType) {
+    try {
+        let response = await axios.post(apiUrl.user.signup(), payload);
+        if (response.data?._id) {
+            const { email, _id, firstname, lastname, username } = response.data;
+            let returnPayload: optionalProfileType = {
+                userId: _id,
+                email,
+                firstname: firstname,
+                lastname: lastname,
+                username
+            };
+            let apiResponse: userApiResponseType = {
+                code: response.status,
+                data: returnPayload,
+            }
+            return apiResponse;
+        } else if (response.data.error) {
+            let apiError: userApiResponseType = {
+                code: response.status,
+                error: [response.data.error.message]
+            }
+            return apiError;
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 let userApiHelper = {
+    performRegister,
     performLogin,
     performLogout,
     fetchMe,
