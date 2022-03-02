@@ -24,6 +24,14 @@ let Login: React.FC<{}> = function (props) {
             let userData = res?.data;
             if (userData && userData.authToken && userData.userId) {
                 window.localStorage.setItem('exspender_user_token', userData.authToken);
+                res = await userApiHelper.fetchMe(userData.authToken);
+                if (res?.error && res.error.length > 0) return;
+                userData = res?.data;
+                if (!userData) {
+                    dispatch(setUserUpdateFailure());
+                    return;
+                }
+                window.localStorage.setItem('exspender_user_token', '');
                 dispatch(updateUser(userData));
             } else {
                 dispatch(setUserUpdateFailure());
