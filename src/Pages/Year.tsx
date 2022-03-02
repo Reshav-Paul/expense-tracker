@@ -50,9 +50,11 @@ let Year: React.FC<{}> = function (props) {
     dispatch(updateYearBudget(payload));
   }
   function incrementCurrentYear() {
+    if (currentYearIndex < 0) return;
     changeCurrentYearIndex((currentYearIndex + 1) % yearBudgets.length);
   }
   function decrementCurrentYear() {
+    if (currentYearIndex < 0) return;
     changeCurrentYearIndex(currentYearIndex === 0 ? yearBudgets.length - 1 : currentYearIndex - 1);
   }
 
@@ -64,7 +66,7 @@ let Year: React.FC<{}> = function (props) {
   if (currentYearIndex < 0) {
     return <div className="container-fluid h-100">
       <Titlebar title={'Annual'} />
-      <AnnualMenuBar onClickAdd={toggleAddForm} year={currentYear} amount={null} mode={'create'}
+      <AnnualMenuBar onClickAdd={toggleAddForm} year={-1} amount={null} mode={'create'}
         increment={incrementCurrentYear} decrement={decrementCurrentYear} onClickUpdate={toggleEditForm} />
       <div className="container-fluid h-80">
         <div className="d-flex flex-col jc-center ai-center h-100">
@@ -99,11 +101,18 @@ let AnnualMenuBar: React.FC<{
   decrement: () => void,
 }> = function (props) {
 
+  function getYearSwitcher() {
+    if (props.year < 0) return null;
+    return [
+      <FontAwesomeIcon icon={faChevronLeft} className='icon' onClick={props.decrement} />,
+      <span className='px-3'>{props.year}</span>,
+      <FontAwesomeIcon icon={faChevronRight} className='icon' onClick={props.increment} />
+    ];
+  }
+
   return <div className="row ai-center">
     <div className="col-10 col-md-9 col-sm-8 text-left">
-      <FontAwesomeIcon icon={faChevronLeft} className='icon' onClick={props.decrement} />
-      <span className='px-3'>{props.year}</span>
-      <FontAwesomeIcon icon={faChevronRight} className='icon' onClick={props.increment} />
+      {getYearSwitcher()}
       <span className="px-3">{props.amount !== null ? 'Budget - ₹ ' + props.amount : ''}</span>
       {
         props.mode === 'update' ?

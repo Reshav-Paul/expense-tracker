@@ -28,10 +28,10 @@ let Login: React.FC<{}> = function (props) {
                 if (res?.error && res.error.length > 0) return;
                 userData = res?.data;
                 if (!userData) {
+                    window.localStorage.setItem('exspender_user_token', '');
                     dispatch(setUserUpdateFailure());
                     return;
                 }
-                window.localStorage.setItem('exspender_user_token', '');
                 dispatch(updateUser(userData));
             } else {
                 dispatch(setUserUpdateFailure());
