@@ -20,8 +20,12 @@ export const store = configureStore({
 
 // selectors
 export const getProfile = (state: stateType) => state.profile;
+export const getUserID = (state: stateType) => state.profile.userId;
+export const getUserToken = (state: stateType) => state.profile.authToken;
 export const getLoginStatus = (state: stateType) => state.profile.userId ? true : false;
 export const getUserUpdateStatus = (state: stateType) => state.profile.updatingStatus;
+export const getYBudgetUpdateStatus = (state: stateType) => state.profile.yBudgetUpdatingStatus;
+export const getYBudgetLoadingStatus = (state: stateType) => state.profile.yBudgetLoadingStatus;
 export const getTheme = (state: stateType) => state.profile.currentTheme;
 export const getYearBudgets = (state: stateType) => state.yearBudgets;
 export const getMonthBudgets = (state: stateType) => state.monthBudgets;

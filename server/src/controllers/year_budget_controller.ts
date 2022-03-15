@@ -8,19 +8,19 @@ import { generalErrors, yearBudgetErrors } from '../utilities/error/error_messag
 import { createValidationError, createNotFoundError, createUnauthorizedError, createEntityExistsError, createQueryValidationError } from '../utilities/error/error_response';
 
 export let yearBudgetCreationValidation = [
-    body('year', yearBudgetErrors.yearNotPresent).exists().notEmpty().trim(),
+    body('year', yearBudgetErrors.yearNotPresent).exists().bail().notEmpty().trim(),
     body('year', yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(yearValidator),
-    body('budget', yearBudgetErrors.budgetNotPresent).exists().notEmpty().trim(),
-    body('budget', yearBudgetErrors.invalidBudget).optional().isNumeric().custom(budgetValidator),
-    body('userId', yearBudgetErrors.userIdNotPresent).exists().notEmpty().trim(),
+    body('budget', yearBudgetErrors.budgetNotPresent).exists().bail().notEmpty().trim(),
+    body('budget', yearBudgetErrors.invalidBudget).optional().isNumeric().bail().custom(budgetValidator),
+    body('userId', yearBudgetErrors.userIdNotPresent).exists().bail().notEmpty().trim(),
     body('userId', generalErrors.invalidMongoId).optional({ checkFalsy: true }).isMongoId(),
 ];
 
 export let yearBudgetUpdationValidation = [
-    body('year', yearBudgetErrors.yearNotPresent).exists().notEmpty().trim(),
+    body('year', yearBudgetErrors.yearNotPresent).exists().bail().notEmpty().trim(),
     body('year', yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(yearValidator),
-    body('budget', yearBudgetErrors.budgetNotPresent).exists().notEmpty().trim(),
-    body('budget', yearBudgetErrors.invalidBudget).optional().isNumeric().custom(budgetValidator),
+    body('budget', yearBudgetErrors.budgetNotPresent).exists().bail().notEmpty().trim(),
+    body('budget', yearBudgetErrors.invalidBudget).optional().isNumeric().bail().custom(budgetValidator),
 ];
 
 export let year_budget_create: RequestHandler = async function (req: any, res, next) {

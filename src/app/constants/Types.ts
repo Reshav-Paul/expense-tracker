@@ -26,6 +26,7 @@ type monthlyBudgetType = {
 type yearlyBudgetType = {
   year: number,
   amount: number,
+  id: string,
 }
 
 type profileType = {
@@ -37,6 +38,8 @@ type profileType = {
   currentTheme: themeType,
   authToken: string,
   updatingStatus: apiActionTypes,
+  yBudgetUpdatingStatus: apiActionTypes,
+  yBudgetLoadingStatus: apiActionTypes,
 }
 type profilePayloadType = {
   userId?: string,
@@ -101,6 +104,12 @@ export type chartColorScheme = {
 export type userApiResponseType = {
   code: number,
   data?: optionalProfileType,
+  error?: string[],
+}
+
+export type yBudgetApiResponseType = {
+  code: number,
+  data?: yearlyBudgetType[],
   error?: string[],
 }
 

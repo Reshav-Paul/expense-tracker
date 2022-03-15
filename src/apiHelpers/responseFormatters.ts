@@ -6,7 +6,9 @@ export let apiErrorFormatter = function (error: AxiosError) {
     if (error.response?.data) {
         let apiError: userApiResponseType = {
             code: error.response.status,
-            error: [...error.response.data.error.errors]
+            error: error.response.data.error.errors
+                ? [...error.response.data.error.errors]
+                : [error.response.data.error]
         }
         return apiError;
     }

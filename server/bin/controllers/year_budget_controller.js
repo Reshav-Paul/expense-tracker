@@ -30,18 +30,18 @@ const YearBudget_1 = __importDefault(require("../models/YearBudget"));
 const error_messages_1 = require("../utilities/error/error_messages");
 const error_response_1 = require("../utilities/error/error_response");
 exports.yearBudgetCreationValidation = [
-    (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.yearNotPresent).exists().notEmpty().trim(),
+    (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.yearNotPresent).exists().bail().notEmpty().trim(),
     (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(customValidators_1.yearValidator),
-    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.budgetNotPresent).exists().notEmpty().trim(),
-    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.invalidBudget).optional().isNumeric().custom(customValidators_1.budgetValidator),
-    (0, express_validator_1.body)('userId', error_messages_1.yearBudgetErrors.userIdNotPresent).exists().notEmpty().trim(),
+    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.budgetNotPresent).exists().bail().notEmpty().trim(),
+    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.invalidBudget).optional().isNumeric().bail().custom(customValidators_1.budgetValidator),
+    (0, express_validator_1.body)('userId', error_messages_1.yearBudgetErrors.userIdNotPresent).exists().bail().notEmpty().trim(),
     (0, express_validator_1.body)('userId', error_messages_1.generalErrors.invalidMongoId).optional({ checkFalsy: true }).isMongoId(),
 ];
 exports.yearBudgetUpdationValidation = [
-    (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.yearNotPresent).exists().notEmpty().trim(),
+    (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.yearNotPresent).exists().bail().notEmpty().trim(),
     (0, express_validator_1.body)('year', error_messages_1.yearBudgetErrors.invalidYear).optional({ checkFalsy: true }).custom(customValidators_1.yearValidator),
-    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.budgetNotPresent).exists().notEmpty().trim(),
-    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.invalidBudget).optional().isNumeric().custom(customValidators_1.budgetValidator),
+    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.budgetNotPresent).exists().bail().notEmpty().trim(),
+    (0, express_validator_1.body)('budget', error_messages_1.yearBudgetErrors.invalidBudget).optional().isNumeric().bail().custom(customValidators_1.budgetValidator),
 ];
 let year_budget_create = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {

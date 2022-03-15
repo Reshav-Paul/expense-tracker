@@ -8,7 +8,18 @@ function addYearlyBudget(state: yearlyBudgetType[], action: actionType) {
   state = [...state, {
     year: action.payload.year,
     amount: action.payload.amount,
+    id: action.payload.id,
   }];
+  return state;
+}
+
+function addYearlyBudgets(state: yearlyBudgetType[], action: actionType) {
+  let newBudgets = action.payload.map((b: any) => ({
+    year: b.year,
+    amount: b.amount,
+    id: b.id,
+  }));
+  state = [...state, ...newBudgets];
   return state;
 }
 
@@ -25,6 +36,7 @@ function updateYearlyBudget(state: yearlyBudgetType[], action: actionType) {
 
 const yearBudgetReducer = createReducer(initialState, {
   'budget/year/add': addYearlyBudget,
+  'budget/year/addAll': addYearlyBudgets,
   'budget/year/update': updateYearlyBudget,
 });
 
@@ -35,6 +47,10 @@ export function addYearBudget(payload: any): actionType {
 
 export function updateYearBudget(payload: any): actionType {
   return { type: 'budget/year/update', payload: payload };
+}
+
+export function addYearBudgets(payload: any): actionType {
+  return { type: 'budget/year/addAll', payload: payload };
 }
 
 export default yearBudgetReducer;

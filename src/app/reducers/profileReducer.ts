@@ -11,6 +11,8 @@ export const userInitialState: profileType = {
   currentTheme: THEMES.DARK_NIGHTS,
   authToken: '',
   updatingStatus: apiActionTypes.clear,
+  yBudgetUpdatingStatus: apiActionTypes.clear,
+  yBudgetLoadingStatus: apiActionTypes.clear,
 }
 
 function updatePersonalInfo(state: profileType, action: actionType) {
@@ -25,16 +27,21 @@ function updateTheme(state: profileType, action: actionType) {
   return state;
 }
 
-function updateUserUpdateRequestStatus(state: profileType, action: actionType) {
+function updateUserRequestStatus(state: profileType, action: actionType) {
   state = updateObject(state, action.payload as optionalProfileType);
-  // console.log(action.payload);
+  return state;
+}
+
+function updateYearBudgetRequestStatus(state: profileType, action: actionType) {
+  state = updateObject(state, action.payload as optionalProfileType);
   return state;
 }
 
 const profileReducer = createReducer(userInitialState, {
   'profile/update': updatePersonalInfo,
   'profile/theme/update': updateTheme,
-  'profile/update/request': updateUserUpdateRequestStatus,
+  'profile/update/request': updateUserRequestStatus,
+  'budget/year/update/request': updateYearBudgetRequestStatus
 });
 
 export default profileReducer;
@@ -59,3 +66,26 @@ export function setUserUpdateFailure() {
   return { type: 'profile/update/request', payload: { updatingStatus: apiActionTypes.failure } };
 }
 
+export function setYearBudgetUpdateStart() {
+  return { type: 'budget/year/update/request', payload: { yBudgetUpdatingStatus: apiActionTypes.request } };
+}
+
+export function setYearBudgetUpdateSuccess() {
+  return { type: 'budget/year/update/request', payload: { yBudgetUpdatingStatus: apiActionTypes.success } };
+}
+
+export function setYearBudgetUpdateFailure() {
+  return { type: 'budget/year/update/request', payload: { yBudgetUpdatingStatus: apiActionTypes.failure } };
+}
+
+export function setYearBudgetLoadingStart() {
+  return { type: 'budget/year/update/request', payload: { yBudgetLoadingStatus: apiActionTypes.request } };
+}
+
+export function setYearBudgetLoadingSuccess() {
+  return { type: 'budget/year/update/request', payload: { yBudgetLoadingStatus: apiActionTypes.success } };
+}
+
+export function setYearBudgetLoadingFailure() {
+  return { type: 'budget/year/update/request', payload: { yBudgetLoadingStatus: apiActionTypes.failure } };
+}

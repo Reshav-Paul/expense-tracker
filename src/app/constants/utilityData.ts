@@ -39,5 +39,11 @@ export const apiUrl = {
         signup: () => apiUrlBase + '/users/signup',
         me: () => apiUrlBase + '/users/me',
         getId: (id: string) => apiUrlBase + '/users/' + id,
+    },
+    yearBudget: {
+        create: () => apiUrlBase + '/budgets/year',
+        readList: () => apiUrlBase + '/budgets/year',
+        readById: (id: string) => apiUrlBase + '/budgets/year/' + id,
+        update: (id: string) => apiUrlBase + '/budgets/year/' + id,
     }
 }

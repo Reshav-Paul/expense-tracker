@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { optionalProfileType, profilePayloadType, userApiResponseType } from '../app/constants/Types';
+import { optionalProfileType, profilePayloadType, userApiResponseType, yBudgetApiResponseType, yearlyBudgetType } from '../app/constants/Types';
 import { apiUrl } from '../app/constants/utilityData';
 
 async function performLogin(email: string, password: string) {
@@ -51,7 +51,8 @@ async function fetchMe(token: string) {
                 email,
                 firstname: firstname,
                 lastname: lastname,
-                username
+                username,
+                authToken: token,
             };
             let apiResponse: userApiResponseType = {
                 code: response.status,
@@ -105,11 +106,106 @@ async function performRegister(payload: profilePayloadType) {
     }
 }
 
+async function addYearBudget(payload: yearlyBudgetType, userId: string, token: string) {
+    try {
+        let requestPayload = {
+            budget: payload.amount,
+            year: payload.year,
+            userId
+        }
+        let response = await axios.post(apiUrl.yearBudget.create(), requestPayload,
+            { headers: { Authorization: 'Bearer ' + token } });
+        if (response.data?.userId) {
+            let returnPayload: yearlyBudgetType = {
+                amount: response.data.budget,
+                year: response.data.year,
+                id: response.data._id,
+            }
+            let apiResponse: yBudgetApiResponseType = {
+                code: response.status,
+                data: [returnPayload],
+            }
+            return apiResponse;
+        } else if (response.data.error) {
+            let apiError: yBudgetApiResponseType = {
+                code: response.status,
+                error: [response.data.error.message]
+            }
+            return apiError;
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function getAllYearBudgets(userId: string, token: string) {
+    try {
+        let response = await axios.get(apiUrl.yearBudget.readList(), { headers: { Authorization: 'Bearer ' + token } });
+        if (response.data) {
+            let apiResponse: yBudgetApiResponseType = {
+                code: response.status,
+                data: response.data.map((b: any) => ({
+                    amount: b.budget,
+                    year: b.year,
+                    id: b._id,
+                })),
+            }
+            return apiResponse;
+        } else if (response.data.error) {
+            let apiError: yBudgetApiResponseType = {
+                code: response.status,
+                error: [response.data.error.message]
+            }
+            return apiError;
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+async function updateYearBudget(payload: yearlyBudgetType, userId: string, token: string) {
+    try {
+        let requestPayload = {
+            budget: payload.amount,
+            year: payload.year,
+            userId
+        }
+        let response = await axios.put(apiUrl.yearBudget.update(payload.id), requestPayload,
+            { headers: { Authorization: 'Bearer ' + token } });
+        if (response.data?.userId) {
+            let returnPayload: yearlyBudgetType = {
+                amount: response.data.budget,
+                year: response.data.year,
+                id: response.data._id,
+            }
+            let apiResponse: yBudgetApiResponseType = {
+                code: response.status,
+                data: [returnPayload],
+            }
+            return apiResponse;
+        } else if (response.data.error) {
+            let apiError: yBudgetApiResponseType = {
+                code: response.status,
+                error: [response.data.error.message]
+            }
+            return apiError;
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 let userApiHelper = {
     performRegister,
     performLogin,
     performLogout,
     fetchMe,
+    yearBudget: {
+        addBudget: addYearBudget,
+        getAll: getAllYearBudgets,
+        updateBudget: updateYearBudget,
+    }
 }
 
 export default userApiHelper;

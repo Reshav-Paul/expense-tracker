@@ -1,31 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { yearlyBudgetType } from '../app/constants/Types';
-import { addYearBudget, updateYearBudget } from '../app/reducers/yearBudgetReducer';
-import { getLoginStatus, getYearBudgets } from '../app/store';
-import AnnualBudgetForm from '../components/AnnualBudgetForm';
-import Titlebar from '../components/Titlebar';
+import axios, { AxiosError } from "axios";
 import { faChevronLeft, faChevronRight, faPen } from '@fortawesome/free-solid-svg-icons';
 import { Redirect } from 'react-router';
+
+import { apiActionTypes, yearlyBudgetType } from '../app/constants/Types';
+import { addYearBudget, addYearBudgets, updateYearBudget } from '../app/reducers/yearBudgetReducer';
+import { getLoginStatus, getUserID, getUserToken, getYBudgetLoadingStatus, getYearBudgets } from '../app/store';
+import AnnualBudgetForm from '../components/AnnualBudgetForm';
+import Titlebar from '../components/Titlebar';
+import { setYearBudgetLoadingFailure, setYearBudgetLoadingStart, setYearBudgetLoadingSuccess, setYearBudgetUpdateFailure, setYearBudgetUpdateStart, setYearBudgetUpdateSuccess } from '../app/reducers/profileReducer';
+import userApiHelper from '../apiHelpers/userApiHelper';
+import { apiErrorFormatter } from '../apiHelpers/responseFormatters';
+import Loading from '../components/Loading';
 
 let Year: React.FC<{}> = function (props) {
 
   let yearBudgets = useSelector(getYearBudgets);
+  let userID = useSelector(getUserID);
+  let userToken = useSelector(getUserToken);
+  let yBudgetLoading = useSelector(getYBudgetLoadingStatus);
   let [currentYearIndex, changeCurrentYearIndex] = useState(yearBudgets.length > 0 ? 0 : -1);
   let [addForm, toggleAddForm] = useState(false);
   let [editForm, toggleEditForm] = useState(false);
+  let currentYear: number = currentYearIndex > 0 ? yearBudgets[currentYearIndex].year : (new Date()).getFullYear();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (yearBudgets.length > 0 && currentYearIndex < 0) changeCurrentYearIndex(0);
     if (currentYearIndex >= yearBudgets.length) changeCurrentYearIndex(yearBudgets.length - 1);
-  }, [currentYearIndex, yearBudgets]);
+    if (yearBudgets.length === 0) fetchAllYearBudgetData();
+  }, [currentYearIndex, yearBudgets, userToken]);
 
-  let currentYear: number = currentYearIndex > 0 ? yearBudgets[currentYearIndex].year : (new Date()).getFullYear();
-  const dispatch = useDispatch();
-
-  function addNewBudget(payload: yearlyBudgetType) {
+  async function addNewBudget(payload: yearlyBudgetType) {
     let existingBudget = yearBudgets.filter(b => b.year === payload.year)[0];
     if (existingBudget) {
       let index = currentYearIndex;
@@ -39,15 +47,86 @@ let Year: React.FC<{}> = function (props) {
       changeCurrentYearIndex(index);
       return;
     }
-    dispatch(addYearBudget(payload));
+
+    dispatch(setYearBudgetUpdateStart());
+    try {
+      let res = await userApiHelper.yearBudget.addBudget(payload, userID, userToken)
+      if (res?.error && res.error.length > 0) {
+        dispatch(setYearBudgetUpdateFailure());
+        return;
+      }
+      if (res?.data && res?.data[0].year === payload.year) {
+        dispatch(addYearBudget(payload));
+      } else {
+        dispatch(setYearBudgetUpdateFailure());
+        return;
+      }
+      dispatch(setYearBudgetUpdateSuccess());
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        let errorResponse = apiErrorFormatter(axiosError);
+        console.log(errorResponse);
+      }
+      dispatch(setYearBudgetUpdateFailure());
+    }
   }
-  function updateBudget(payload: yearlyBudgetType) {
+
+  async function fetchAllYearBudgetData() {
+    if (userToken) {
+      dispatch(setYearBudgetLoadingStart());
+      try {
+        let res = await userApiHelper.yearBudget.getAll(userID, userToken)
+        if (res?.error && res.error.length > 0) {
+          dispatch(setYearBudgetLoadingFailure());
+          return;
+        }
+        if (res?.data && res?.data[0].year) {
+          console.log(res.data);
+          dispatch(addYearBudgets(res.data));
+        } else {
+          dispatch(setYearBudgetLoadingFailure());
+          return;
+        }
+        dispatch(setYearBudgetLoadingSuccess());
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError;
+          console.log(axiosError.response?.data);
+        }
+        dispatch(setYearBudgetLoadingFailure());
+      }
+    };
+  }
+
+  async function updateBudget(payload: yearlyBudgetType) {
     let existingBudget = yearBudgets.filter(b => b.year === payload.year)[0];
     if (!existingBudget) {
       addNewBudget(payload);
       return;
     }
-    dispatch(updateYearBudget(payload));
+    dispatch(setYearBudgetUpdateStart());
+    try {
+      let res = await userApiHelper.yearBudget.updateBudget(payload, userID, userToken)
+      if (res?.error && res.error.length > 0) {
+        dispatch(setYearBudgetUpdateFailure());
+        return;
+      }
+      if (res?.data && res?.data[0].year === payload.year) {
+        dispatch(updateYearBudget(payload));
+      } else {
+        dispatch(setYearBudgetUpdateFailure());
+        return;
+      }
+      dispatch(setYearBudgetUpdateSuccess());
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        let errorResponse = apiErrorFormatter(axiosError);
+        console.log(errorResponse);
+      }
+      dispatch(setYearBudgetUpdateFailure());
+    }
   }
   function incrementCurrentYear() {
     if (currentYearIndex < 0) return;
@@ -70,11 +149,11 @@ let Year: React.FC<{}> = function (props) {
         increment={incrementCurrentYear} decrement={decrementCurrentYear} onClickUpdate={toggleEditForm} />
       <div className="container-fluid h-80">
         <div className="d-flex flex-col jc-center ai-center h-100">
-          <h4>No Annual Budget Added</h4>
+          {yBudgetLoading === apiActionTypes.request ? <Loading /> : <h4>No Annual Budget Added</h4>}
         </div>
       </div>
       <AnnualBudgetForm close={() => toggleAddForm(false)} active={addForm}
-        mode={'create'} onSubmit={addNewBudget} budget={{ year: currentYear, amount: 0 }} />
+        mode={'create'} onSubmit={addNewBudget} budget={{ year: currentYear, amount: 0, id: '' }} />
     </div>;
   }
 
@@ -82,10 +161,18 @@ let Year: React.FC<{}> = function (props) {
 
   return <div className="container-fluid h-100">
     <Titlebar title={'Annual'} />
-    <AnnualMenuBar onClickAdd={toggleAddForm} year={currentYearBudget.year} amount={currentYearBudget.amount} mode={'update'}
-      increment={incrementCurrentYear} decrement={decrementCurrentYear} onClickUpdate={toggleEditForm} />
+    {
+      yBudgetLoading === apiActionTypes.request
+        ? <div className="container-fluid h-80">
+          <div className="d-flex flex-col jc-center ai-center h-100">
+            <Loading />
+          </div>
+        </div>
+        : <AnnualMenuBar onClickAdd={toggleAddForm} year={currentYearBudget.year} amount={currentYearBudget.amount} mode={'update'}
+          increment={incrementCurrentYear} decrement={decrementCurrentYear} onClickUpdate={toggleEditForm} />
+    }
     <AnnualBudgetForm close={() => toggleAddForm(false)} active={addForm}
-      mode={'create'} onSubmit={addNewBudget} budget={{ year: currentYearBudget.year, amount: 0 }} />
+      mode={'create'} onSubmit={addNewBudget} budget={{ year: currentYearBudget.year, amount: 0, id: '' }} />
     <AnnualBudgetForm close={() => toggleEditForm(false)} active={editForm}
       mode={'update'} onSubmit={updateBudget} budget={currentYearBudget} />
   </div>;
@@ -103,11 +190,11 @@ let AnnualMenuBar: React.FC<{
 
   function getYearSwitcher() {
     if (props.year < 0) return null;
-    return [
-      <FontAwesomeIcon icon={faChevronLeft} className='icon' onClick={props.decrement} />,
-      <span className='px-3'>{props.year}</span>,
+    return <span>
+      <FontAwesomeIcon icon={faChevronLeft} className='icon' onClick={props.decrement} />
+      <span className='px-3'>{props.year}</span>
       <FontAwesomeIcon icon={faChevronRight} className='icon' onClick={props.increment} />
-    ];
+    </span>;
   }
 
   return <div className="row ai-center">

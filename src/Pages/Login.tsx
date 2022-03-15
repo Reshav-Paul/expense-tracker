@@ -25,7 +25,10 @@ let Login: React.FC<{}> = function (props) {
             if (userData && userData.authToken && userData.userId) {
                 window.localStorage.setItem('exspender_user_token', userData.authToken);
                 res = await userApiHelper.fetchMe(userData.authToken);
-                if (res?.error && res.error.length > 0) return;
+                if (res?.error && res.error.length > 0) {
+                    dispatch(setUserUpdateFailure());
+                    return;
+                }
                 userData = res?.data;
                 if (!userData) {
                     window.localStorage.setItem('exspender_user_token', '');
@@ -47,12 +50,17 @@ let Login: React.FC<{}> = function (props) {
         dispatch(setUserUpdateStart());
         try {
             let res = await userApiHelper.fetchMe(token);
-            if (res?.error && res.error.length > 0) return;
+            if (res?.error && res.error.length > 0) {
+                dispatch(setUserUpdateFailure());
+                return;
+            }
             let userData = res?.data;
             if (userData && userData.userId) {
                 dispatch(updateUser(userData));
-                dispatch(setUserUpdateSuccess());
+            } else {
+                dispatch(setUserUpdateFailure());
             }
+            dispatch(setUserUpdateSuccess());
         } catch (error) {
             dispatch(setUserUpdateFailure());
         }

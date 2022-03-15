@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { yearlyBudgetType } from '../app/constants/Types';
+import { apiActionTypes, yearlyBudgetType } from '../app/constants/Types';
 import { HoverForm, InputYear } from '../components/utility';
+import { useSelector } from 'react-redux';
+import { getYBudgetUpdateStatus } from '../app/store';
+import Loading from './Loading';
 
 let AnnualBudgetForm: React.FC<{
   active: boolean,
@@ -13,8 +16,8 @@ let AnnualBudgetForm: React.FC<{
   mode?: 'create' | 'update'
 }> = function (props) {
 
+  let yBudgetUpdateStatus = useSelector(getYBudgetUpdateStatus);
   let { budget } = props;
-  // let currentYear = (new Date()).getFullYear();
 
   let [year, changeYear] = useState(budget.year);
   let [amount, changeAmount] = useState(budget.amount ? budget.amount.toString() : '');
@@ -26,13 +29,17 @@ let AnnualBudgetForm: React.FC<{
     e.preventDefault();
     let numBudget = parseInt(amount)
     props.onSubmit({
-      year, amount: numBudget,
+      year, amount: numBudget, id: budget.id,
     });
     props.close();
   }
 
   let modeText = 'Add';
   if (props.mode === 'update') modeText = 'Update';
+
+  if (yBudgetUpdateStatus === apiActionTypes.request) {
+    return <Loading />;
+  }
 
   return <HoverForm active={props.active} submit={handleSubmit} close={props.close}>
     <div className="d-flex jc-between ai-center mb-4">
