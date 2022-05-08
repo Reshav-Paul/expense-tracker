@@ -1,0 +1,62 @@
+.msg-card {
+  padding: 0.5rem 0.8rem;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  min-width: 320px;
+  max-width: 320px;
+  margin-bottom: 1rem;
+  animation: new-message-animate .3s linear;
+  right: 0px;
+  transition: all 0.5s ease-out;
+}
+
+.msg-card.removed {
+  position: relative;
+  right: -500px;
+}
+
+.error-msg {
+  background-color: var(--err-bg);
+  color: var(--err-font);
+  box-shadow: 0px 0px 6px var(--err-bg);
+}
+
+.warning-msg {
+  background-color: var(--warn-bg);
+  color: var(--warn-font);
+  box-shadow: 0px 0px 6px var(--warn-bg);
+}
+
+.success-msg {
+  background-color: var(--suc-bg);
+  color: var(--suc-font);
+  box-shadow: 0px 0px 6px var(--suc-bg);
+}
+
+.msg-card:last-of-type {
+  margin-bottom: 0;
+}
+
+@keyframes new-message-animate {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes removed-message-animate {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}

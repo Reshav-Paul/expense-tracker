@@ -1,0 +1,44 @@
+.App {
+  height: 100%;
+  scrollbar-width: thin;
+  background-color: var(--bg-col);
+}
+
+.li-none {
+  list-style: none;
+}
+
+.fc-primary {
+  color: var(--font-pr);
+}
+
+.fc-primary-light {
+  color: var(--font-pr-lt);
+}
+
+.fc-secondary {
+  color: var(--font-sec);
+}
+
+#navbar {
+  box-shadow: 0 0 5px 5px var(--shadow-col);
+}
+
+.int-link {
+  color: var(--pr-col);
+  padding: 0.25rem 1rem;
+  font-size: 0.9rem;
+}
+
+.nav-link>* {
+  padding: 0.25rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.nav-link>.selected {
+  color: var(--font-sec);
+  background-color: var(--pr-col);
+  padding: 0.25rem 1rem;
+  border-radius: 4px;
+}
