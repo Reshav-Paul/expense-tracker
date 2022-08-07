@@ -18,6 +18,13 @@ export type userProfileType = {
   token: string,
 }
 
+export type yearBudgetType = {
+  id: string,
+  year: number,
+  budget: number,
+  userId: string,
+}
+
 export type userProfileTypeOptional = {
   id?: string,
   firstname?: string,
@@ -27,10 +34,21 @@ export type userProfileTypeOptional = {
   token?: string,
 }
 
+export type yearBudgetTypeOptional = {
+  id?: string,
+  year?: number,
+  budget?: number,
+  userId?: string,
+}
+
 export type userProfileUpdateType = {
   id: string,
   firstname?: string,
   lastname?: string,
+}
+
+export type yearBudgetUpdateType = {
+  budget: number,
 }
 
 export type userProfileRegisterType = {
@@ -41,12 +59,25 @@ export type userProfileRegisterType = {
   password: string | undefined,
 }
 
+export type yearBudgetCreateType = {
+  year: number,
+  budget: number,
+  userId: string,
+}
+
+export type yearBudgetStateType = {
+  budgets: yearBudgetType[],
+  initialFetchFailed: number,
+}
+
 // UI
 export type uiLoadingStateType = {
   profile: apiActionTypes,
+  yearBudget: apiActionTypes,
 }
 export type uiLoadingStateTypeOptional = {
   profile?: apiActionTypes,
+  yearBudget?: apiActionTypes,
 }
 
 export enum messageClass {
@@ -79,18 +110,23 @@ export type messageStateType = {
 
 // main state
 export type stateType = {
-  userProfile: userProfileType
+  userProfile: userProfileType,
+  yearBudget: yearBudgetStateType,
   ui: uiLoadingStateType,
   message: messageStateType,
 }
 
 // redux
 export enum uiLoadingClasses {
-  profile
+  profile, yearBudget
 }
 export type userProfileActionType = {
   type: string,
   payload: userProfileTypeOptional
+}
+export type yearBudgetActionType = {
+  type: string,
+  payload: yearBudgetType,
 }
 export type uiLoadingActionType = {
   type: string,
@@ -113,6 +149,12 @@ export type actionType = {
 export type userApiResponseType = {
   code: number,
   data?: userProfileTypeOptional,
+  errors?: string[],
+}
+
+export type yBApiResponseType = {
+  code: number,
+  data?: yearBudgetType,
   errors?: string[],
 }
 

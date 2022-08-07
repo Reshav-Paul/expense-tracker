@@ -126,7 +126,7 @@ async function updateUser(payload: userProfileUpdateType, token: string) {
     returnData = { code: 400 };
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.response?.data);
+      // console.log(axiosError.response?.data);
       if (axiosError.response) {
         if (axiosError.response?.data.error) {
           returnData = {

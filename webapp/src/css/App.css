@@ -20,6 +20,10 @@
   color: var(--font-sec);
 }
 
+.bg-sec {
+  background-color: var(--sec-col);
+}
+
 #navbar {
   box-shadow: 0 0 5px 5px var(--shadow-col);
 }
@@ -41,4 +45,25 @@
   background-color: var(--pr-col);
   padding: 0.25rem 1rem;
   border-radius: 4px;
+}
+
+div.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: fit-content;
+  cursor: pointer;
+  padding: 0.3rem 0.8rem;
+}
+
+div.btn>.btn-text {
+  font-size: 0.85rem;
+}
+
+.loading-overlay {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(var(--bg-col-rgb), 0.5);
 }

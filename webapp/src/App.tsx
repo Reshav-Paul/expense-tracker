@@ -63,6 +63,7 @@ function mapGlobalTheme(theme: colorSchemeType) {
     '--pr-col': theme.ui.primary,
     '--sec-col': theme.ui.secondary,
     '--bg-col': theme.ui.background,
+    '--bg-col-rgb': theme.ui.backgroundRGB,
     '--font-pr': theme.ui.fontPrimary,
     '--font-sec': theme.ui.fontSecondary,
     '--font-pr-lt': theme.ui.fontPrimaryLight,

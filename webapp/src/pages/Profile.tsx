@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from 'uuid';
 
 import profileApi from "../api/profileApi";
 import { addMessage, markMessageRemoval, removeMessage } from "../app/reducers/messageReducer";
@@ -9,7 +8,7 @@ import { profileInitialState, updateUser } from "../app/reducers/userProfileRedu
 import { getProfile } from "../app/store";
 import Navbar from "../components/Navbar";
 import { getSuccessMessage, mapNetworkErrorsToUIErrors } from "../utilities/errorHandlingUtilities";
-import { messageClass, messageType, messageTypes, rootThunkAction, uiLoadingClasses, userProfileTypeOptional, userProfileUpdateType } from "../utilities/types";
+import { messageClass, messageType, messageTypes, rootThunkAction, uiLoadingClasses, userProfileUpdateType } from "../utilities/types";
 
 let Profile: React.FC<{}> = function Profile(props) {
   const dispatch = useDispatch();

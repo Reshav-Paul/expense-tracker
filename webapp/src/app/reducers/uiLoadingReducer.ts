@@ -4,11 +4,15 @@ import { apiActionTypes, uiLoadingActionType, uiLoadingClasses, uiLoadingStateTy
 
 const loadingInitialState: uiLoadingStateType = {
   profile: apiActionTypes.clear,
+  yearBudget: apiActionTypes.clear,
 }
 
 function updateLoadingHandler(state: uiLoadingStateType, action: uiLoadingActionType) {
   if (action.payload.type === uiLoadingClasses.profile) {
     state = updateObject(state, { profile: action.payload.state } as uiLoadingStateTypeOptional);
+  }
+  if (action.payload.type === uiLoadingClasses.yearBudget) {
+    state = updateObject(state, { yearBudget: action.payload.state } as uiLoadingStateTypeOptional)
   }
   return state;
 }

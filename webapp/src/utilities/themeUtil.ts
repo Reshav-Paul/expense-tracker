@@ -11,6 +11,7 @@ export type lightUIColorSchemeType = {
   primary: string,
   secondary: string,
   background: string,
+  backgroundRGB: string,
   fontPrimary: string,
   fontSecondary: string,
   fontPrimaryLight: string,
@@ -35,8 +36,8 @@ let lightMessageTheme: messageThemeType = {
 let lightUITheme: lightUIColorSchemeType = {
   primary: '#DD6E42',
   secondary: '#1A936F',
-  // background: '#F1F2EB',
   background: '#FAF8F8',
+  backgroundRGB: '250, 248, 248',
   fontPrimary: '#1A181B',
   fontSecondary: '#F1F2EB',
   fontPrimaryLight: '#7A7A7A',
