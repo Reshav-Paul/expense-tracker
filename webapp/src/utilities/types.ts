@@ -67,7 +67,7 @@ export type yearBudgetCreateType = {
 
 export type yearBudgetStateType = {
   budgets: yearBudgetType[],
-  initialFetchFailed: number,
+  initialFetches: number,
 }
 
 // UI
@@ -155,6 +155,7 @@ export type userApiResponseType = {
 export type yBApiResponseType = {
   code: number,
   data?: yearBudgetType,
+  listData?: yearBudgetType[],
   errors?: string[],
 }
 

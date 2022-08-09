@@ -23,7 +23,7 @@ export const getUserToken = (state: stateType) => state.userProfile.token;
 export const isLoggedIn = (state: stateType) => state.userProfile.token && state.userProfile.token.length > 0;
 
 export const getYearBudgets = (state: stateType) => state.yearBudget.budgets;
-export const getYearBudgetFetches = (state: stateType) => state.yearBudget.initialFetchFailed;
+export const getYearBudgetFetches = (state: stateType) => state.yearBudget.initialFetches;
 
 export const getMessages = (state: stateType) => state.message.messages;
 
